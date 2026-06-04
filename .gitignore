@@ -1,0 +1,67 @@
+# ========================
+#  Entorno y secretos
+# ========================
+.env
+.env.local
+.env.development
+.env.production
+.env.test
+appsettings.json
+appsettings.Development.json
+
+# ========================
+#  Dependencias
+# ========================
+node_modules/
+
+# ========================
+#  Logs
+# ========================
+logs/
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ========================
+#  Build / Compilados
+# ========================
+dist/
+build/
+
+# ========================
+#  Archivos temporales
+# ========================
+uploads/
+tmp/
+temp/
+
+# ========================
+#  Sistema Operativo
+# ========================
+Thumbs.db
+Desktop.ini
+.DS_Store
+.AppleDouble
+.LSOverride
+*~
+
+# ========================
+#  Editores e IDEs
+# ========================
+.vscode/
+!.vscode/extensions.json
+.idea/
+*.iml
+
+# ========================
+#  Testing
+# ========================
+coverage/
+.nyc_output/
+
+# ========================
+#  Misc
+# ========================
+*.pem

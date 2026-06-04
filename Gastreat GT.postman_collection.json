@@ -1,0 +1,1560 @@
+{
+  "info": {
+    "_postman_id": "3c83ae50-9f01-4fc2-9667-5f3bd5d11c0a",
+    "name": "Gastreat GT",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "47617511",
+    "_collection_link": "https://go.postman.co/collection/47617511-3c83ae50-9f01-4fc2-9667-5f3bd5d11c0a?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Auth Api",
+      "item": [
+        {
+          "name": "Autenticación",
+          "item": [
+            {
+              "name": "Login",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"EmailOrUsername\": \"admin\",\r\n    \"Password\": \"GT123!\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:5198/api/v1/auth/login",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "5198",
+                  "path": [
+                    "api",
+                    "v1",
+                    "auth",
+                    "login"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Register",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "Name",
+                      "value": "Frederick",
+                      "type": "text",
+                      "uuid": "780ddbbf-d1e9-4fd6-a04f-f6d05717946c"
+                    },
+                    {
+                      "key": "Surname",
+                      "value": "Lopez",
+                      "type": "text",
+                      "uuid": "56f3c0ef-cc9f-4f6d-9de0-b6777daa6bfd"
+                    },
+                    {
+                      "key": "Username",
+                      "value": "Xandrx",
+                      "type": "text",
+                      "uuid": "b2a405a1-6338-4f09-9e50-6ed5d89602db"
+                    },
+                    {
+                      "key": "Email",
+                      "value": "fpacheco-2024237@kinal.edu.gt",
+                      "type": "text",
+                      "uuid": "043c065b-9606-4ec4-8597-c5079aa3581f"
+                    },
+                    {
+                      "key": "Password",
+                      "value": "Pass1234",
+                      "type": "text",
+                      "uuid": "9d9f5cea-84cd-4f7e-9537-79f3eb0d165e"
+                    },
+                    {
+                      "key": "Phone",
+                      "value": "12341234",
+                      "type": "text",
+                      "uuid": "126d706a-716c-4747-947b-5ca88e340612"
+                    },
+                    {
+                      "key": "ProfilePicture",
+                      "type": "file",
+                      "uuid": "0c2c338d-b868-49ae-abaa-020ac1a62bc0",
+                      "src": "postman-cloud:///1f1241a2-f5ab-4760-be97-de7ef513a87c"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "http://localhost:5198/api/v1/auth/register",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "5198",
+                  "path": [
+                    "api",
+                    "v1",
+                    "auth",
+                    "register"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Verify Email",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"Token\":\"\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:5198/api/v1/auth/verify-email",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "5198",
+                  "path": [
+                    "api",
+                    "v1",
+                    "auth",
+                    "verify-email"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Refresh",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"refreshToken\": \"6e7729c5b3344fb983d7d6a6e24110a2\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:5198/api/v1/auth/refresh",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "5198",
+                  "path": [
+                    "api",
+                    "v1",
+                    "auth",
+                    "refresh"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Logout",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c3Jfd3ljWnZXeWZORUNrIiwianRpIjoiNzU3NjA3NGEtZTYyNC00NGRiLWIzNzctMTViODI5NDZmY2UyIiwiaWF0IjoxNzc3MTYxNTYxLCJyb2xlIjoiQURNSU5fUk9MRSIsImV4cCI6MTc3NzE2MzM2MSwiaXNzIjoiS2luYWxTcG9ydHMiLCJhdWQiOiJLaW5hbFNwb3J0cyJ9.CYyvDxFo4FsrI7d4s6dFy0h8TPyF674sCtaj4ALBtcs",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"refreshToken\": \"\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:5198/api/v1/auth/logout",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "5198",
+                  "path": [
+                    "api",
+                    "v1",
+                    "auth",
+                    "logout"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Resend-verification",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"email\": \"\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:5198/api/v1/auth/resend-verification",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "5198",
+                  "path": [
+                    "api",
+                    "v1",
+                    "auth",
+                    "resend-verification"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Forgot-password",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"email\":\"\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:5198/api/v1/auth/forgot-password",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "5198",
+                  "path": [
+                    "api",
+                    "v1",
+                    "auth",
+                    "forgot-password"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Reset-password",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"token\": \"\",\r\n    \"newPassword\": \"\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:5198/api/v1/auth/reset-password",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "5198",
+                  "path": [
+                    "api",
+                    "v1",
+                    "auth",
+                    "reset-password"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Profile",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c3Jfd3ljWnZXeWZORUNrIiwianRpIjoiNzU3NjA3NGEtZTYyNC00NGRiLWIzNzctMTViODI5NDZmY2UyIiwiaWF0IjoxNzc3MTYxNTYxLCJyb2xlIjoiQURNSU5fUk9MRSIsImV4cCI6MTc3NzE2MzM2MSwiaXNzIjoiS2luYWxTcG9ydHMiLCJhdWQiOiJLaW5hbFNwb3J0cyJ9.CYyvDxFo4FsrI7d4s6dFy0h8TPyF674sCtaj4ALBtcs",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:5198/api/v1/auth/profile",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "5198",
+                  "path": [
+                    "api",
+                    "v1",
+                    "auth",
+                    "profile"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "by-id",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"userId\": \"\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:5198/api/v1/auth/profile/by-id",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "5198",
+                  "path": [
+                    "api",
+                    "v1",
+                    "auth",
+                    "profile",
+                    "by-id"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Users",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c3Jfd3ljWnZXeWZORUNrIiwianRpIjoiNzU3NjA3NGEtZTYyNC00NGRiLWIzNzctMTViODI5NDZmY2UyIiwiaWF0IjoxNzc3MTYxNTYxLCJyb2xlIjoiQURNSU5fUk9MRSIsImV4cCI6MTc3NzE2MzM2MSwiaXNzIjoiS2luYWxTcG9ydHMiLCJhdWQiOiJLaW5hbFNwb3J0cyJ9.CYyvDxFo4FsrI7d4s6dFy0h8TPyF674sCtaj4ALBtcs",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:5198/api/v1/auth/users",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "5198",
+                  "path": [
+                    "api",
+                    "v1",
+                    "auth",
+                    "users"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Usuarios",
+          "item": [
+            {
+              "name": "Role",
+              "request": {
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"roleName\": \"ADMIN_ROLE\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:5198/api/v1/users/{userId}/role",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "5198",
+                  "path": [
+                    "api",
+                    "v1",
+                    "users",
+                    "{userId}",
+                    "role"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Roles",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c3Jfd3ljWnZXeWZORUNrIiwianRpIjoiNzU3NjA3NGEtZTYyNC00NGRiLWIzNzctMTViODI5NDZmY2UyIiwiaWF0IjoxNzc3MTYxNTYxLCJyb2xlIjoiQURNSU5fUk9MRSIsImV4cCI6MTc3NzE2MzM2MSwiaXNzIjoiS2luYWxTcG9ydHMiLCJhdWQiOiJLaW5hbFNwb3J0cyJ9.CYyvDxFo4FsrI7d4s6dFy0h8TPyF674sCtaj4ALBtcs",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:5198/api/v1/users/{userId}/roles",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "5198",
+                  "path": [
+                    "api",
+                    "v1",
+                    "users",
+                    "{userId}",
+                    "roles"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "RoleName",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c3Jfd3ljWnZXeWZORUNrIiwianRpIjoiNzU3NjA3NGEtZTYyNC00NGRiLWIzNzctMTViODI5NDZmY2UyIiwiaWF0IjoxNzc3MTYxNTYxLCJyb2xlIjoiQURNSU5fUk9MRSIsImV4cCI6MTc3NzE2MzM2MSwiaXNzIjoiS2luYWxTcG9ydHMiLCJhdWQiOiJLaW5hbFNwb3J0cyJ9.CYyvDxFo4FsrI7d4s6dFy0h8TPyF674sCtaj4ALBtcs",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:5198/api/v1/users/by-role/{roleName}",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "5198",
+                  "path": [
+                    "api",
+                    "v1",
+                    "users",
+                    "by-role",
+                    "{roleName}"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Healt Check",
+          "item": [
+            {
+              "name": "Healt",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:5198/api/v1/health",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "5198",
+                  "path": [
+                    "api",
+                    "v1",
+                    "health"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Admin Server",
+      "item": [
+        {
+          "name": "Menú & inventario",
+          "item": [
+            {
+              "name": "menu option",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c3Jfd3ljWnZXeWZORUNrIiwianRpIjoiNzU3NjA3NGEtZTYyNC00NGRiLWIzNzctMTViODI5NDZmY2UyIiwiaWF0IjoxNzc3MTYxNTYxLCJyb2xlIjoiQURNSU5fUk9MRSIsImV4cCI6MTc3NzE2MzM2MSwiaXNzIjoiS2luYWxTcG9ydHMiLCJhdWQiOiJLaW5hbFNwb3J0cyJ9.CYyvDxFo4FsrI7d4s6dFy0h8TPyF674sCtaj4ALBtcs",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:3022/gastreatGT/Admin/v1/menu",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3022",
+                  "path": [
+                    "gastreatGT",
+                    "Admin",
+                    "v1",
+                    "menu"
+                  ],
+                  "query": [
+                    {
+                      "key": "category",
+                      "value": "Comida",
+                      "disabled": true
+                    },
+                    {
+                      "key": "status",
+                      "value": "Disponible",
+                      "disabled": true
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "menu id",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c3Jfd3ljWnZXeWZORUNrIiwianRpIjoiNzU3NjA3NGEtZTYyNC00NGRiLWIzNzctMTViODI5NDZmY2UyIiwiaWF0IjoxNzc3MTYxNTYxLCJyb2xlIjoiQURNSU5fUk9MRSIsImV4cCI6MTc3NzE2MzM2MSwiaXNzIjoiS2luYWxTcG9ydHMiLCJhdWQiOiJLaW5hbFNwb3J0cyJ9.CYyvDxFo4FsrI7d4s6dFy0h8TPyF674sCtaj4ALBtcs",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:3022/gastreatGT/Admin/menu/:id",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3022",
+                  "path": [
+                    "gastreatGT",
+                    "Admin",
+                    "menu",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": ""
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "menu",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c3Jfd3ljWnZXeWZORUNrIiwianRpIjoiNzU3NjA3NGEtZTYyNC00NGRiLWIzNzctMTViODI5NDZmY2UyIiwiaWF0IjoxNzc3MTYxNTYxLCJyb2xlIjoiQURNSU5fUk9MRSIsImV4cCI6MTc3NzE2MzM2MSwiaXNzIjoiS2luYWxTcG9ydHMiLCJhdWQiOiJLaW5hbFNwb3J0cyJ9.CYyvDxFo4FsrI7d4s6dFy0h8TPyF674sCtaj4ALBtcs",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "name",
+                      "value": "",
+                      "type": "text",
+                      "uuid": "60cbcf76-ba0c-41c3-9e31-9039691206ba"
+                    },
+                    {
+                      "key": "price",
+                      "value": "",
+                      "type": "text",
+                      "uuid": "1bd98fb9-57f6-4bfd-bf71-30eb8756fd6c"
+                    },
+                    {
+                      "key": "category",
+                      "value": "",
+                      "type": "text",
+                      "uuid": "fb04a5de-846e-49df-81ba-70e295cb3b34"
+                    },
+                    {
+                      "key": "description",
+                      "value": "",
+                      "type": "text",
+                      "uuid": "25aea577-f46d-4899-bc80-671faff9dfbe"
+                    },
+                    {
+                      "key": "image",
+                      "type": "file",
+                      "uuid": "f7ab1530-ee12-40eb-923e-f58a95aee322",
+                      "value": null
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "http://localhost:3022/gastreatGT/Admin/v1/menu",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3022",
+                  "path": [
+                    "gastreatGT",
+                    "Admin",
+                    "v1",
+                    "menu"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "menu token",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c3Jfd3ljWnZXeWZORUNrIiwianRpIjoiNzU3NjA3NGEtZTYyNC00NGRiLWIzNzctMTViODI5NDZmY2UyIiwiaWF0IjoxNzc3MTYxNTYxLCJyb2xlIjoiQURNSU5fUk9MRSIsImV4cCI6MTc3NzE2MzM2MSwiaXNzIjoiS2luYWxTcG9ydHMiLCJhdWQiOiJLaW5hbFNwb3J0cyJ9.CYyvDxFo4FsrI7d4s6dFy0h8TPyF674sCtaj4ALBtcs",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": []
+                },
+                "url": {
+                  "raw": "http://localhost:3022/gastreatGT/Admin/v1/menu/:id",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3022",
+                  "path": [
+                    "gastreatGT",
+                    "Admin",
+                    "v1",
+                    "menu",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": ""
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Status",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c3Jfd3ljWnZXeWZORUNrIiwianRpIjoiNzU3NjA3NGEtZTYyNC00NGRiLWIzNzctMTViODI5NDZmY2UyIiwiaWF0IjoxNzc3MTYxNTYxLCJyb2xlIjoiQURNSU5fUk9MRSIsImV4cCI6MTc3NzE2MzM2MSwiaXNzIjoiS2luYWxTcG9ydHMiLCJhdWQiOiJLaW5hbFNwb3J0cyJ9.CYyvDxFo4FsrI7d4s6dFy0h8TPyF674sCtaj4ALBtcs",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"status\": \"Agotado\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:3022/gastreatGT/Admin/v1/menu/:id/status",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3022",
+                  "path": [
+                    "gastreatGT",
+                    "Admin",
+                    "v1",
+                    "menu",
+                    ":id",
+                    "status"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": ""
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "menu delete",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c3Jfd3ljWnZXeWZORUNrIiwianRpIjoiNzU3NjA3NGEtZTYyNC00NGRiLWIzNzctMTViODI5NDZmY2UyIiwiaWF0IjoxNzc3MTYxNTYxLCJyb2xlIjoiQURNSU5fUk9MRSIsImV4cCI6MTc3NzE2MzM2MSwiaXNzIjoiS2luYWxTcG9ydHMiLCJhdWQiOiJLaW5hbFNwb3J0cyJ9.CYyvDxFo4FsrI7d4s6dFy0h8TPyF674sCtaj4ALBtcs",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:3022/gastreatGT/Admin/v1/menu/:id",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3022",
+                  "path": [
+                    "gastreatGT",
+                    "Admin",
+                    "v1",
+                    "menu",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": ""
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Mesas",
+          "item": [
+            {
+              "name": "table status",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c3Jfd3ljWnZXeWZORUNrIiwianRpIjoiNzU3NjA3NGEtZTYyNC00NGRiLWIzNzctMTViODI5NDZmY2UyIiwiaWF0IjoxNzc3MTYxNTYxLCJyb2xlIjoiQURNSU5fUk9MRSIsImV4cCI6MTc3NzE2MzM2MSwiaXNzIjoiS2luYWxTcG9ydHMiLCJhdWQiOiJLaW5hbFNwb3J0cyJ9.CYyvDxFo4FsrI7d4s6dFy0h8TPyF674sCtaj4ALBtcs",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:3022/gastreatGT/Admin/v1/tables",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3022",
+                  "path": [
+                    "gastreatGT",
+                    "Admin",
+                    "v1",
+                    "tables"
+                  ],
+                  "query": [
+                    {
+                      "key": "status",
+                      "value": "Libre",
+                      "disabled": true
+                    },
+                    {
+                      "key": "status",
+                      "value": "Ocupada",
+                      "disabled": true
+                    },
+                    {
+                      "key": "status",
+                      "value": "Sucia",
+                      "disabled": true
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "table",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c3Jfd3ljWnZXeWZORUNrIiwianRpIjoiNzU3NjA3NGEtZTYyNC00NGRiLWIzNzctMTViODI5NDZmY2UyIiwiaWF0IjoxNzc3MTYxNTYxLCJyb2xlIjoiQURNSU5fUk9MRSIsImV4cCI6MTc3NzE2MzM2MSwiaXNzIjoiS2luYWxTcG9ydHMiLCJhdWQiOiJLaW5hbFNwb3J0cyJ9.CYyvDxFo4FsrI7d4s6dFy0h8TPyF674sCtaj4ALBtcs",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:3022/gastreatGT/Admin/v1/tables/:id",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3022",
+                  "path": [
+                    "gastreatGT",
+                    "Admin",
+                    "v1",
+                    "tables",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": ""
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "tables",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c3Jfd3ljWnZXeWZORUNrIiwianRpIjoiNzU3NjA3NGEtZTYyNC00NGRiLWIzNzctMTViODI5NDZmY2UyIiwiaWF0IjoxNzc3MTYxNTYxLCJyb2xlIjoiQURNSU5fUk9MRSIsImV4cCI6MTc3NzE2MzM2MSwiaXNzIjoiS2luYWxTcG9ydHMiLCJhdWQiOiJLaW5hbFNwb3J0cyJ9.CYyvDxFo4FsrI7d4s6dFy0h8TPyF674sCtaj4ALBtcs",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"number\": 5,\r\n    \"capacity\": 4,\r\n    \"location\": \"Terreza\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:3022/gastreatGT/Admin/v1/tables",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3022",
+                  "path": [
+                    "gastreatGT",
+                    "Admin",
+                    "v1",
+                    "tables"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "tables",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c3Jfd3ljWnZXeWZORUNrIiwianRpIjoiNzU3NjA3NGEtZTYyNC00NGRiLWIzNzctMTViODI5NDZmY2UyIiwiaWF0IjoxNzc3MTYxNTYxLCJyb2xlIjoiQURNSU5fUk9MRSIsImV4cCI6MTc3NzE2MzM2MSwiaXNzIjoiS2luYWxTcG9ydHMiLCJhdWQiOiJLaW5hbFNwb3J0cyJ9.CYyvDxFo4FsrI7d4s6dFy0h8TPyF674sCtaj4ALBtcs",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"number\": 6,\r\n    \"capacity\": 6,\r\n    \"location\": \"Interior\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:3022/gastreatGT/Admin/v1/tables/:id",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3022",
+                  "path": [
+                    "gastreatGT",
+                    "Admin",
+                    "v1",
+                    "tables",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": ""
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "status",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c3Jfd3ljWnZXeWZORUNrIiwianRpIjoiNzU3NjA3NGEtZTYyNC00NGRiLWIzNzctMTViODI5NDZmY2UyIiwiaWF0IjoxNzc3MTYxNTYxLCJyb2xlIjoiQURNSU5fUk9MRSIsImV4cCI6MTc3NzE2MzM2MSwiaXNzIjoiS2luYWxTcG9ydHMiLCJhdWQiOiJLaW5hbFNwb3J0cyJ9.CYyvDxFo4FsrI7d4s6dFy0h8TPyF674sCtaj4ALBtcs",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"status\": \"Sucia\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:3022/gastreatGT/Admin/v1/tables/:id/status",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3022",
+                  "path": [
+                    "gastreatGT",
+                    "Admin",
+                    "v1",
+                    "tables",
+                    ":id",
+                    "status"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": ""
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "delete",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c3Jfd3ljWnZXeWZORUNrIiwianRpIjoiNzU3NjA3NGEtZTYyNC00NGRiLWIzNzctMTViODI5NDZmY2UyIiwiaWF0IjoxNzc3MTYxNTYxLCJyb2xlIjoiQURNSU5fUk9MRSIsImV4cCI6MTc3NzE2MzM2MSwiaXNzIjoiS2luYWxTcG9ydHMiLCJhdWQiOiJLaW5hbFNwb3J0cyJ9.CYyvDxFo4FsrI7d4s6dFy0h8TPyF674sCtaj4ALBtcs",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:3022/gastreatGT/Admin/v1/tables/:id",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3022",
+                  "path": [
+                    "gastreatGT",
+                    "Admin",
+                    "v1",
+                    "tables",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": ""
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Ordenes",
+          "item": [
+            {
+              "name": "orders",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c3Jfd3ljWnZXeWZORUNrIiwianRpIjoiNzU3NjA3NGEtZTYyNC00NGRiLWIzNzctMTViODI5NDZmY2UyIiwiaWF0IjoxNzc3MTYxNTYxLCJyb2xlIjoiQURNSU5fUk9MRSIsImV4cCI6MTc3NzE2MzM2MSwiaXNzIjoiS2luYWxTcG9ydHMiLCJhdWQiOiJLaW5hbFNwb3J0cyJ9.CYyvDxFo4FsrI7d4s6dFy0h8TPyF674sCtaj4ALBtcs",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:3022/gastreatGT/Admin/v1/orders",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3022",
+                  "path": [
+                    "gastreatGT",
+                    "Admin",
+                    "v1",
+                    "orders"
+                  ],
+                  "query": [
+                    {
+                      "key": "status",
+                      "value": "Pendiente",
+                      "type": "text",
+                      "disabled": true
+                    },
+                    {
+                      "key": "tableId",
+                      "value": "mongoId",
+                      "type": "text",
+                      "disabled": true
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "pending",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c3Jfd3ljWnZXeWZORUNrIiwianRpIjoiNzU3NjA3NGEtZTYyNC00NGRiLWIzNzctMTViODI5NDZmY2UyIiwiaWF0IjoxNzc3MTYxNTYxLCJyb2xlIjoiQURNSU5fUk9MRSIsImV4cCI6MTc3NzE2MzM2MSwiaXNzIjoiS2luYWxTcG9ydHMiLCJhdWQiOiJLaW5hbFNwb3J0cyJ9.CYyvDxFo4FsrI7d4s6dFy0h8TPyF674sCtaj4ALBtcs",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:3022/gastreatGT/Admin/v1/orders/pending",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3022",
+                  "path": [
+                    "gastreatGT",
+                    "Admin",
+                    "v1",
+                    "orders",
+                    "pending"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "order token",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c3Jfd3ljWnZXeWZORUNrIiwianRpIjoiNzU3NjA3NGEtZTYyNC00NGRiLWIzNzctMTViODI5NDZmY2UyIiwiaWF0IjoxNzc3MTYxNTYxLCJyb2xlIjoiQURNSU5fUk9MRSIsImV4cCI6MTc3NzE2MzM2MSwiaXNzIjoiS2luYWxTcG9ydHMiLCJhdWQiOiJLaW5hbFNwb3J0cyJ9.CYyvDxFo4FsrI7d4s6dFy0h8TPyF674sCtaj4ALBtcs",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:3022/gastreatGT/Admin/v1/orders/:id",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3022",
+                  "path": [
+                    "gastreatGT",
+                    "Admin",
+                    "v1",
+                    "orders",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": ""
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "ordern",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c3Jfd3ljWnZXeWZORUNrIiwianRpIjoiNzU3NjA3NGEtZTYyNC00NGRiLWIzNzctMTViODI5NDZmY2UyIiwiaWF0IjoxNzc3MTYxNTYxLCJyb2xlIjoiQURNSU5fUk9MRSIsImV4cCI6MTc3NzE2MzM2MSwiaXNzIjoiS2luYWxTcG9ydHMiLCJhdWQiOiJLaW5hbFNwb3J0cyJ9.CYyvDxFo4FsrI7d4s6dFy0h8TPyF674sCtaj4ALBtcs",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"tableId\": \"65c3f2b1e4b0a23456789012\",\r\n  \"items\": [\r\n    { \"menuItemId\": \"65c3f2c5e4b0a23456789034\", \"quantity\": 2, \"notes\": \"sin cebolla\" },\r\n    { \"menuItemId\": \"65c3f2d0e4b0a23456789056\", \"quantity\": 1 }\r\n  ],\r\n  \"notes\": \"Cliente con alergia a los mariscos\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:3022/gastreatGT/Admin/v1/orders",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3022",
+                  "path": [
+                    "gastreatGT",
+                    "Admin",
+                    "v1",
+                    "orders"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "status",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c3Jfd3ljWnZXeWZORUNrIiwianRpIjoiNzU3NjA3NGEtZTYyNC00NGRiLWIzNzctMTViODI5NDZmY2UyIiwiaWF0IjoxNzc3MTYxNTYxLCJyb2xlIjoiQURNSU5fUk9MRSIsImV4cCI6MTc3NzE2MzM2MSwiaXNzIjoiS2luYWxTcG9ydHMiLCJhdWQiOiJLaW5hbFNwb3J0cyJ9.CYyvDxFo4FsrI7d4s6dFy0h8TPyF674sCtaj4ALBtcs",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"status\": \"Preparando\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:3022/gastreatGT/Admin/v1/orders/:id/status",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3022",
+                  "path": [
+                    "gastreatGT",
+                    "Admin",
+                    "v1",
+                    "orders",
+                    ":id",
+                    "status"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": ""
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "add-items",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c3Jfd3ljWnZXeWZORUNrIiwianRpIjoiNzU3NjA3NGEtZTYyNC00NGRiLWIzNzctMTViODI5NDZmY2UyIiwiaWF0IjoxNzc3MTYxNTYxLCJyb2xlIjoiQURNSU5fUk9MRSIsImV4cCI6MTc3NzE2MzM2MSwiaXNzIjoiS2luYWxTcG9ydHMiLCJhdWQiOiJLaW5hbFNwb3J0cyJ9.CYyvDxFo4FsrI7d4s6dFy0h8TPyF674sCtaj4ALBtcs",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"items\": [\r\n    { \"menuItemId\": \"65c3f2e2e4b0a23456789078\", \"quantity\": 1, \"notes\": \"extra salsa\" }\r\n  ]\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:3022/gastreatGT/Admin/v1/orders/:id/add-items",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3022",
+                  "path": [
+                    "gastreatGT",
+                    "Admin",
+                    "v1",
+                    "orders",
+                    ":id",
+                    "add-items"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": ""
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "delete",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c3Jfd3ljWnZXeWZORUNrIiwianRpIjoiNzU3NjA3NGEtZTYyNC00NGRiLWIzNzctMTViODI5NDZmY2UyIiwiaWF0IjoxNzc3MTYxNTYxLCJyb2xlIjoiQURNSU5fUk9MRSIsImV4cCI6MTc3NzE2MzM2MSwiaXNzIjoiS2luYWxTcG9ydHMiLCJhdWQiOiJLaW5hbFNwb3J0cyJ9.CYyvDxFo4FsrI7d4s6dFy0h8TPyF674sCtaj4ALBtcs",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:3022/gastreatGT/Admin/v1/orders/:id",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3022",
+                  "path": [
+                    "gastreatGT",
+                    "Admin",
+                    "v1",
+                    "orders",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": ""
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Facturacion y pagos",
+          "item": [
+            {
+              "name": "state",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c3Jfd3ljWnZXeWZORUNrIiwianRpIjoiNzU3NjA3NGEtZTYyNC00NGRiLWIzNzctMTViODI5NDZmY2UyIiwiaWF0IjoxNzc3MTYxNTYxLCJyb2xlIjoiQURNSU5fUk9MRSIsImV4cCI6MTc3NzE2MzM2MSwiaXNzIjoiS2luYWxTcG9ydHMiLCJhdWQiOiJLaW5hbFNwb3J0cyJ9.CYyvDxFo4FsrI7d4s6dFy0h8TPyF674sCtaj4ALBtcs",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:3022/gastreatGT/Admin/v1/billing",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3022",
+                  "path": [
+                    "gastreatGT",
+                    "Admin",
+                    "v1",
+                    "billing"
+                  ],
+                  "query": [
+                    {
+                      "key": "status",
+                      "value": "Pendiente",
+                      "disabled": true
+                    },
+                    {
+                      "key": "status",
+                      "value": "Pagado",
+                      "disabled": true
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "order",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c3Jfd3ljWnZXeWZORUNrIiwianRpIjoiNzU3NjA3NGEtZTYyNC00NGRiLWIzNzctMTViODI5NDZmY2UyIiwiaWF0IjoxNzc3MTYxNTYxLCJyb2xlIjoiQURNSU5fUk9MRSIsImV4cCI6MTc3NzE2MzM2MSwiaXNzIjoiS2luYWxTcG9ydHMiLCJhdWQiOiJLaW5hbFNwb3J0cyJ9.CYyvDxFo4FsrI7d4s6dFy0h8TPyF674sCtaj4ALBtcs",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:3022/gastreatGT/Admin/v1/billing/:orderId",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3022",
+                  "path": [
+                    "gastreatGT",
+                    "Admin",
+                    "v1",
+                    "billing",
+                    ":orderId"
+                  ],
+                  "variable": [
+                    {
+                      "key": "orderId",
+                      "value": ""
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "pay",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c3Jfd3ljWnZXeWZORUNrIiwianRpIjoiNzU3NjA3NGEtZTYyNC00NGRiLWIzNzctMTViODI5NDZmY2UyIiwiaWF0IjoxNzc3MTYxNTYxLCJyb2xlIjoiQURNSU5fUk9MRSIsImV4cCI6MTc3NzE2MzM2MSwiaXNzIjoiS2luYWxTcG9ydHMiLCJhdWQiOiJLaW5hbFNwb3J0cyJ9.CYyvDxFo4FsrI7d4s6dFy0h8TPyF674sCtaj4ALBtcs",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"orderId\": \"65c3f2b1e4b0a23456789012\",\r\n  \"paymentMethod\": \"Efectivo\",\r\n  \"tip\": 25.00\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:3022/gastreatGT/Admin/v1/billing/pay",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3022",
+                  "path": [
+                    "gastreatGT",
+                    "Admin",
+                    "v1",
+                    "billing",
+                    "pay"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Health Check",
+          "item": [
+            {
+              "name": "Health",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:3022/gastreatGT/Admin/v1/health",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "3022",
+                  "path": [
+                    "gastreatGT",
+                    "Admin",
+                    "v1",
+                    "health"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+services:
+  postgres:
+    image: postgres:13
+    container_name: gastreat_gt
+    environment:
+      POSTGRES_USER: gastreat
+      POSTGRES_PASSWORD: eat
+      POSTGRES_DB: gastreat_gt_users
+    ports:
+      - "5438:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+      
