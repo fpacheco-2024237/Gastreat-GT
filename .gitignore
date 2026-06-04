@@ -2,12 +2,14 @@
 #  Entorno y secretos
 # ========================
 .env
+.env.example
 .env.local
 .env.development
 .env.production
 .env.test
 appsettings.json
 appsettings.Development.json
+server-admin/.env.example
 
 # ========================
 #  Dependencias
