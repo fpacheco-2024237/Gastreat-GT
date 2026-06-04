@@ -9,7 +9,6 @@
 .env.test
 appsettings.json
 appsettings.Development.json
-server-admin/.env.example
 
 # ========================
 #  Dependencias
