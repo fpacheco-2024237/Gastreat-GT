@@ -4,23 +4,37 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
-import { corsOptions } from './cors.configuration.js';
-import { helmetOptions } from './helmet.configuration.js';
-import { dbConnection } from './db.configuration.js';
-import { requestLimit } from './rateLimit.configuration.js';
-import { AppError } from '../middlewares/handle-errors.js';
-import menuRoutes from '../src/menu/menu.routes.js';
+import { dbConnection } from './db.js';
+import { requestLimit } from '../middlewares/request-limit.js';
+import { corsOptions } from './cors-configuration.js';
+import { helmetConfiguration } from './helmet-configuration.js';
+import { errorHandler } from '../middlewares/handle-errors.js';
+
+import categoryRoutes from '../src/menu/category.routes.js';
+import productRoutes from '../src/menu/product.routes.js';
 import tableRoutes from '../src/tables/table.routes.js';
 import orderRoutes from '../src/orders/order.routes.js';
-import billingRoutes from '../src/billing/billing.routes.js';
+import invoiceRoutes from '../src/billing/invoice.routes.js';
+import restaurantRoutes from '../src/restaurants/restaurant.routes.js';
 
 const BASE_PATH = '/gastreatGT/Admin/v1';
 
+const middlewares = (app) => {
+  app.use(express.urlencoded({ extended: false, limit: '10mb' }));
+  app.use(express.json({ limit: '10mb' }));
+  app.use(cors(corsOptions));
+  app.use(helmet(helmetConfiguration));
+  app.use(requestLimit);
+  app.use(morgan('dev'));
+};
+
 const routes = (app) => {
-    app.use(`${BASE_PATH}/menu`, menuRoutes);
-    app.use(`${BASE_PATH}/tables`, tableRoutes);
+    app.use(`${BASE_PATH}/categories`, categoryRoutes);
+    app.use(`${BASE_PATH}/products`, productRoutes);
+    app.use(`${BASE_PATH}`, tableRoutes); // includes tables and reservations
     app.use(`${BASE_PATH}/orders`, orderRoutes);
-    app.use(`${BASE_PATH}/billing`, billingRoutes);
+    app.use(`${BASE_PATH}/invoices`, invoiceRoutes);
+    app.use(`${BASE_PATH}/restaurants`, restaurantRoutes);
 
     app.get(`${BASE_PATH}/health`, (req, res) => {
         res.status(200).json({
@@ -30,21 +44,13 @@ const routes = (app) => {
         });
     });
 
+    // 404 handler
     app.use((req, res) => {
         res.status(404).json({
             success: false,
             message: 'Endpoint no encontrado'
         });
     });
-};
-
-const middlewares = (app) => {
-    app.use(express.json({ limit: '10mb' }));
-    app.use(express.urlencoded({ extended: false, limit: '10mb' }));
-    app.use(cors(corsOptions));
-    app.use(helmet(helmetOptions));
-    app.use(morgan('dev'));
-    app.use(requestLimit);
 };
 
 export const initServer = async () => {
@@ -56,7 +62,9 @@ export const initServer = async () => {
         middlewares(app);
         await dbConnection();
         routes(app);
-        app.use(AppError);
+
+        app.use(errorHandler);
+        
         app.listen(PORT, () => {
             console.log(`Server Gastreat GT Admin running on port: ${PORT}`);
             console.log(`Health check: http://localhost:${PORT}${BASE_PATH}/health`);

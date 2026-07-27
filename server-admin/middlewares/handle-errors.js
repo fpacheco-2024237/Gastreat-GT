@@ -1,25 +1,36 @@
-export const AppError = (err, req, res) => {
+class AppError extends Error {
+  constructor(message, statusCode = 500, code = 'CUSTOM_ERROR') {
+    super(message);
+    this.statusCode = statusCode;
+    this.code = code;
+    Error.captureStackTrace(this, this.constructor);
+  }
+}
+
+const sendValidationError = (res, err) => {
+  const errors = Object.values(err.errors || {}).map((error) => ({
+    field: error.path,
+    message: error.message,
+  }));
+
+  return res.status(400).json({
+    success: false,
+    message: 'Error de validación',
+    errors,
+  });
+};
+
+export const errorHandler = (err, req, res, next) => {
   console.error(`Error in Admin Server: ${err.message}`);
-  console.error(`Stack trace: ${err.stack}`);
-  console.error(`Request: ${req.method} ${req.path}`);
 
-  // Error de validación de Mongoose
+  // Mongoose validation
   if (err.name === 'ValidationError') {
-    const errors = Object.values(err.errors).map((error) => ({
-      field: error.path,
-      message: error.message,
-    }));
-
-    return res.status(400).json({
-      success: false,
-      message: 'Error de validación',
-      errors,
-    });
+    return sendValidationError(res, err);
   }
 
-  // Error de duplicado de Mongoose
+  // Duplicate key
   if (err.code === 11000) {
-    const field = Object.keys(err.keyValue)[0];
+    const field = Object.keys(err.keyValue || {})[0] || 'field';
     return res.status(400).json({
       success: false,
       message: `${field} ya existe`,
@@ -27,7 +38,7 @@ export const AppError = (err, req, res) => {
     });
   }
 
-  // Error de cast de Mongoose (ID inválido)
+  // CastError (invalid id)
   if (err.name === 'CastError') {
     return res.status(400).json({
       success: false,
@@ -53,17 +64,17 @@ export const AppError = (err, req, res) => {
     });
   }
 
-  // Error personalizado con status
-  if (err.statusCode) {
-    return res.status(err.statusCode).json({
+  // Custom AppError
+  if (err instanceof AppError || err.statusCode) {
+    return res.status(err.statusCode || 500).json({
       success: false,
       message: err.message,
       error: err.code || 'CUSTOM_ERROR',
     });
   }
 
-  // Error por defecto del servidor
-  res.status(500).json({
+  // Default server error
+  return res.status(500).json({
     success: false,
     message: 'Error interno del servidor',
     error: 'INTERNAL_SERVER_ERROR',
@@ -73,3 +84,5 @@ export const AppError = (err, req, res) => {
     }),
   });
 };
+
+export { AppError };

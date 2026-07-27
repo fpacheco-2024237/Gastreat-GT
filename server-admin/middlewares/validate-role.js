@@ -1,24 +1,11 @@
 'use strict';
 
 /**
- * Roles provenientes del Auth Service (.NET)
- *   ADMIN_ROLE : Acceso total al sistema Gastreat GT
- *   USER_ROLE  : Acceso limitado a operaciones de consulta y propias
+ * Middleware para validar que el usuario tenga un rol específico
+ * Debe ejecutarse después de validateJWT
  */
-export const ROLES = {
-  ADMIN: 'ADMIN_ROLE',
-  USER:  'USER_ROLE',
-};
+export const ROLES = { ADMIN: 'ADMIN_ROLE', USER: 'USER_ROLE' };
 
-/**
- * Middleware para validar que el usuario tenga uno o más roles permitidos.
- * Debe ejecutarse siempre después de validateJWT.
- *
- * Uso:
- *   requireRole('ADMIN_ROLE')
- *   requireRole('ADMIN_ROLE', 'USER_ROLE')
- *   requireRole(ROLES.ADMIN, ROLES.USER)
- */
 export const requireRole = (...allowedRoles) => {
   return (req, res, next) => {
     if (!req.user) {
@@ -36,7 +23,7 @@ export const requireRole = (...allowedRoles) => {
         success: false,
         message: 'No tienes permisos para acceder a este recurso',
         error: 'FORBIDDEN',
-        requiredRoles: allowedRoles,
+        requiredRole: allowedRoles,
         yourRole: userRole,
       });
     }

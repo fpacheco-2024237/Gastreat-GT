@@ -2,7 +2,7 @@
 
 import MenuItem from './menu.model.js';
 import { AppError } from '../../middlewares/handle-errors.js';
-import { cloudinary } from '../../middlewares/upload.middleware.js';
+import { cloudinary } from '../../middlewares/file-uploader.js';
 
 export const getAllItems = async (filters = {}) => {
     const query = {};

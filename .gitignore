@@ -2,11 +2,8 @@
 #  Entorno y secretos
 # ========================
 .env
-.env.example
-.env.local
-.env.development
-.env.production
-.env.test
+.env.*
+!.env.example
 appsettings.json
 appsettings.Development.json
 
@@ -14,6 +11,14 @@ appsettings.Development.json
 #  Dependencias
 # ========================
 node_modules/
+**/node_modules/
+
+# ========================
+#  .NET / C#
+# ========================
+[Bb]in/
+[Oo]bj/
+.vs/
 
 # ========================
 #  Logs
@@ -30,6 +35,9 @@ yarn-error.log*
 # ========================
 dist/
 build/
+.expo/
+.expo-shared/
+.next/
 
 # ========================
 #  Archivos temporales

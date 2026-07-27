@@ -2,50 +2,46 @@
 
 import Table from './table.model.js';
 import { AppError } from '../../middlewares/handle-errors.js';
+import { ensureRestaurantIsActive } from '../restaurants/restaurant.service.js';
 
-export const getAllTables = async (filters = {}) => {
-    const query = {};
-    if (filters.status) query.status = filters.status;
-    return await Table.find(query).sort({ number: 1 });
+export const getAll = async (filters = {}) => {
+  const query = {};
+  if (filters.restaurantId) query.restaurantId = filters.restaurantId;
+  if (filters.zone) query.zone = filters.zone;
+  if (filters.status) query.status = filters.status;
+  return await Table.find(query).sort({ tableNumber: 1 });
 };
 
-export const getTableById = async (id) => {
-    const table = await Table.findById(id);
-    if (!table) throw new AppError('Mesa no encontrada', 404);
-    return table;
+export const getById = async (id) => {
+  const table = await Table.findById(id);
+  if (!table) throw new AppError('Mesa no encontrada', 404);
+  return table;
 };
 
-export const createTable = async (data) => {
-    const exists = await Table.findOne({ number: data.number });
-    if (exists) throw new AppError(`La mesa número ${data.number} ya existe`, 409);
+export const create = async (data) => {
+  await ensureRestaurantIsActive(data.restaurantId);
+  try {
     return await Table.create(data);
+  } catch (err) {
+    if (err.code === 11000) throw new AppError('Ya existe una mesa con ese número en este restaurante', 409, 'DUPLICATE');
+    throw err;
+  }
 };
 
-export const updateTable = async (id, data) => {
-    const table = await Table.findById(id);
-    if (!table) throw new AppError('Mesa no encontrada', 404);
-
-    // Si cambia el número, verificar que no exista otro con ese número
-    if (data.number && data.number !== table.number) {
-        const exists = await Table.findOne({ number: data.number });
-        if (exists) throw new AppError(`La mesa número ${data.number} ya existe`, 409);
-    }
-
-    return await Table.findByIdAndUpdate(id, data, { new: true, runValidators: true });
+export const update = async (id, data) => {
+  await getById(id);
+  return await Table.findByIdAndUpdate(id, data, { new: true, runValidators: true });
 };
 
 export const changeStatus = async (id, status) => {
-    const table = await Table.findById(id);
-    if (!table) throw new AppError('Mesa no encontrada', 404);
-    table.status = status;
-    return await table.save();
+  await getById(id);
+  return await Table.findByIdAndUpdate(id, { status }, { new: true, runValidators: true });
 };
 
-export const deleteTable = async (id) => {
-    const table = await Table.findById(id);
-    if (!table) throw new AppError('Mesa no encontrada', 404);
-    if (table.status === 'Ocupada') {
-        throw new AppError('No se puede eliminar una mesa ocupada', 400);
-    }
-    await table.deleteOne();
+export const remove = async (id) => {
+  const table = await getById(id);
+  if (table.status === 'OCUPADA' || table.status === 'RESERVADA') {
+    throw new AppError('No se puede eliminar una mesa ocupada o reservada', 409);
+  }
+  return await Table.findByIdAndDelete(id);
 };

@@ -3,48 +3,56 @@
 import * as tableService from './table.service.js';
 
 export const getAll = async (req, res, next) => {
-    try {
-        const { status } = req.query;
-        const tables = await tableService.getAllTables({ status });
-        res.status(200).json({ success: true, count: tables.length, data: tables });
-    } catch (err) { next(err); }
+  try {
+    const { restaurantId, zone, status } = req.query;
+    const items = await tableService.getAll({ restaurantId, zone, status });
+    res.status(200).json({ success: true, count: items.length, data: items });
+  } catch (err) {
+    next(err);
+  }
 };
 
 export const getOne = async (req, res, next) => {
-    try {
-        const table = await tableService.getTableById(req.params.id);
-        res.status(200).json({ success: true, data: table });
-    } catch (err) { next(err); }
+  try {
+    const item = await tableService.getById(req.params.id);
+    res.status(200).json({ success: true, data: item });
+  } catch (err) {
+    next(err);
+  }
 };
 
 export const create = async (req, res, next) => {
-    try {
-        const table = await tableService.createTable(req.body);
-        res.status(201).json({ success: true, message: 'Mesa creada exitosamente', data: table });
-    } catch (err) { next(err); }
+  try {
+    const item = await tableService.create(req.body);
+    res.status(201).json({ success: true, message: 'Mesa creada', data: item });
+  } catch (err) {
+    next(err);
+  }
 };
 
 export const update = async (req, res, next) => {
-    try {
-        const table = await tableService.updateTable(req.params.id, req.body);
-        res.status(200).json({ success: true, message: 'Mesa actualizada', data: table });
-    } catch (err) { next(err); }
+  try {
+    const item = await tableService.update(req.params.id, req.body);
+    res.status(200).json({ success: true, message: 'Mesa actualizada', data: item });
+  } catch (err) {
+    next(err);
+  }
 };
 
-export const updateStatus = async (req, res, next) => {
-    try {
-        const table = await tableService.changeStatus(req.params.id, req.body.status);
-        res.status(200).json({
-            success: true,
-            message: `Mesa ${table.number} ahora está "${table.status}"`,
-            data: table,
-        });
-    } catch (err) { next(err); }
+export const changeStatus = async (req, res, next) => {
+  try {
+    const item = await tableService.changeStatus(req.params.id, req.body.status);
+    res.status(200).json({ success: true, message: 'Estado de mesa actualizado', data: item });
+  } catch (err) {
+    next(err);
+  }
 };
 
 export const remove = async (req, res, next) => {
-    try {
-        await tableService.deleteTable(req.params.id);
-        res.status(200).json({ success: true, message: 'Mesa eliminada exitosamente' });
-    } catch (err) { next(err); }
+  try {
+    await tableService.remove(req.params.id);
+    res.status(200).json({ success: true, message: 'Mesa eliminada' });
+  } catch (err) {
+    next(err);
+  }
 };

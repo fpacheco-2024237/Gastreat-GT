@@ -10,6 +10,12 @@ Microservicio de administración para la plataforma Gastreat GT. Este servicio m
 
 Implementa arquitectura modular con Express.js y MongoDB como base de datos.
 
+## Convenciones de diseño
+
+- Multi-tenant por restaurante: cada recurso debe permanecer acotado a un restaurantId y debe reutilizar la validación de restaurante activo antes de escribir.
+- Menú e inventario: disponibilidad, precio y stock deben mantenerse consistentes; las categorías no se eliminan si siguen teniendo productos activos asociados.
+- API y arquitectura: todas las rutas deben seguir el mismo envelope de respuesta y los middlewares compartidos del repo. El desarrollo nuevo debe usar pnpm.
+
 ## Servicios del Sistema
 
 | # | Servicio | Tecnología | Puerto |

@@ -1,32 +1,45 @@
 'use strict';
 
 import { Router } from 'express';
-import { body, param } from 'express-validator';
+import { param } from 'express-validator';
 import * as tableController from './table.controller.js';
-import { verifyToken, isAdmin } from '../../middlewares/auth.middleware.js';
-import { validateFields } from '../../middlewares/validate.middleware.js';
+import * as reservationController from './reservation.controller.js';
+import { checkValidators } from '../../middlewares/check-validators.js';
+import { checkTableReservationConflict } from '../../middlewares/table-conflict.js';
+import {
+  validateGetTables,
+  validateGetTableById,
+  validateCreateTable,
+  validateUpdateTable,
+  validateTableStatusChange,
+  validateDeleteTable,
+  validateGetReservations,
+  validateGetPendingReservations,
+  validateGetReservationById,
+  validateConfirmReservation,
+  validateCancelReservation,
+} from '../../middlewares/table-validators.js';
 
 const router = Router();
 
-const validateCreate = [
-    body('number').isInt({ min: 1 }).withMessage('El número de mesa debe ser entero positivo'),
-    body('capacity').isInt({ min: 1, max: 20 }).withMessage('Capacidad entre 1 y 20'),
-    validateFields,
-];
+// ── Mesas ──
+router.get('/tables', validateGetTables, tableController.getAll);
+router.get('/tables/:id', validateGetTableById, tableController.getOne);
+router.post('/tables', validateCreateTable, tableController.create);
+router.put('/tables/:id', validateUpdateTable, tableController.update);
+router.patch('/tables/:id/status', validateTableStatusChange, tableController.changeStatus);
+router.delete('/tables/:id', validateDeleteTable, tableController.remove);
 
-const validateStatus = [
-    param('id').isMongoId().withMessage('ID inválido'),
-    body('status')
-        .isIn(['Libre', 'Ocupada', 'Sucia'])
-        .withMessage('Estado inválido. Usa: Libre | Ocupada | Sucia'),
-    validateFields,
-];
-
-router.get('/', verifyToken, tableController.getAll);
-router.get('/:id', verifyToken, tableController.getOne);
-router.post('/', verifyToken, isAdmin, validateCreate, tableController.create);
-router.put('/:id', verifyToken, isAdmin, tableController.update);
-router.patch('/:id/status', verifyToken, validateStatus, tableController.updateStatus);
-router.delete('/:id', verifyToken, isAdmin, tableController.remove);
+// ── Reservas (creación vive en server-user) ──
+router.get('/reservations', validateGetReservations, reservationController.getAll);
+router.get('/reservations/pending', validateGetPendingReservations, reservationController.getPending);
+router.get(
+  '/reservations/:id',
+  validateGetReservationById,
+  checkTableReservationConflict.length ? (req, res, next) => next() : (req, res, next) => next(), // no-op: el conflicto solo aplica a creación/confirmación
+  reservationController.getOne
+);
+router.put('/reservations/:id/confirm', validateConfirmReservation, checkTableReservationConflict, reservationController.confirm);
+router.put('/reservations/:id/cancel', validateCancelReservation, reservationController.cancel);
 
 export default router;
