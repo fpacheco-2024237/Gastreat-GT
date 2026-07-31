@@ -1,5 +1,3 @@
-'use strict';
-
 export const helmetOptions = {
     contentSecurityPolicy: {
         useDefaults: true,
@@ -7,7 +5,7 @@ export const helmetOptions = {
             defaultSrc:     ["'self'"],
             scriptSrc:      ["'self'", "'unsafe-inline'"],
             styleSrc:       ["'self'", "'unsafe-inline'"],
-            imgSrc:         ["'self'", 'data:', 'blob:', 'res.cloudinary.com'],
+            imgSrc:         ["'self'", 'data:', 'blob:'],
             connectSrc:     ["'self'"],
             fontSrc:        ["'self'"],
             objectSrc:      ["'none'"],

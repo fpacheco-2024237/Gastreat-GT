@@ -1,0 +1,30 @@
+{
+  "name": "client-user",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo run:android",
+    "ios": "expo run:ios",
+    "web": "expo start --web"
+  },
+  "dependencies": {
+    "expo": "~55.0.0",
+    "react": "19.0.0",
+    "react-native": "0.83.0",
+    "axios": "^1.4.0",
+    "zustand": "^4.4.0",
+    "react-hook-form": "^7.0.0",
+    "@react-navigation/native": "^6.1.7",
+    "@react-navigation/native-stack": "^6.9.12",
+    "@react-native-async-storage/async-storage": "^1.19.0",
+    "expo-secure-store": "~12.1.0",
+    "@expo/vector-icons": "^13.0.0",
+    "react-native-safe-area-context": "^4.5.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.0.0"
+  }
+}
