@@ -1,0 +1,210 @@
+name: gastreat-gt-2024237
+
+services:
+  postgres:
+    image: postgres:13
+    container_name: pg-gastreat-gt
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-gastreat_db}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-eat}
+      POSTGRES_DB: ${POSTGRES_DB:-gastreat}
+    ports:
+      - "${POSTGRES_PORT:-5438}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL",
+        "pg_isready -U ${POSTGRES_USER:-gastreat_db} -d ${POSTGRES_DB:-gastreat}",]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    networks:
+      - gastreat-network
+  mongodb:
+    image: mongo:7
+    container_name: gastreat_mongodb
+    restart: unless-stopped
+    ports:
+      - "${MONGODB_PORT:-27019}:27017"
+    volumes:
+      - mongo_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+    networks:
+      - gastreat-network
+
+  auth-service:
+    build:
+      context: ./authentication-service/auth-service
+      dockerfile: ../../dockerfiles/Dockerfile.auth-service
+    container_name: gastreat_auth_service
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:5198
+      DOTNET_USE_POLLING_FILE_WATCHER: "1"
+      ConnectionStrings__DefaultConnection: >-
+        Host=postgres;Port=5432;Database=${POSTGRES_DB:-gastreat};
+        Username=${POSTGRES_USER:-gastreat_db};Password=${POSTGRES_PASSWORD:-eat}
+      AppSettings__FrontendUrl: ${FRONTEND_URL:-http://localhost:5174}
+      JwtSettings__SecretKey: ${JWT_SECRET:-OyXm1PV8kTC3JtZ3Js5LMibbNUw}
+      JwtSettings__Issuer: ${JWT_ISSUER:-AuthService}
+      JwtSettings__Audience: ${JWT_AUDIENCE:-AuthService}
+    env_file:
+      - path: .env.docker
+        required: false
+    volumes:
+      - ./authentication-service/auth-service:/src
+      - /src/src/AuthService.Api/bin
+      - /src/src/AuthService.Api/obj
+      - /src/src/AuthService.Application/bin
+      - /src/src/AuthService.Application/obj
+      - /src/src/AuthService.Domain/bin
+      - /src/src/AuthService.Domain/obj
+      - /src/src/AuthService.Persistence/bin
+      - /src/src/AuthService.Persistence/obj
+    ports:
+      - "${AUTH_SERVICE_PORT:-5198}:5198"
+    networks:
+      - gastreat-network
+
+  auth-node:
+    build:
+      context: ./authentication-service/auth-node
+      dockerfile: ../../dockerfiles/Dockerfile.auth-node
+    container_name: gastreat_auth_node
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      NODE_ENV: development
+      PORT: 3026
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: ${POSTGRES_DB:-gastreat}
+      DB_USERNAME: ${POSTGRES_USER:-gastreat_db}
+      DB_PASSWORD: ${POSTGRES_PASSWORD:-eat}
+      DEFAULT_CONNECTION: >-
+        Host=postgres;Port=5432;Database=${POSTGRES_DB:-gastreatGT};
+        Username=${POSTGRES_USER:-gastreat_db};Password=${POSTGRES_PASSWORD:-eat}
+      JWT_SECRET: ${JWT_SECRET:-OyXm1PV8kTC3JtZ3Js5LMibbNUw}
+      JWT_ISSUER: ${JWT_ISSUER:-AuthService}
+      JWT_AUDIENCE: ${JWT_AUDIENCE:-AuthService}
+      FRONTEND_URL: ${FRONTEND_URL:-http://localhost:5174}
+    env_file:
+      - path: .env.docker
+        required: false
+    volumes:
+      - ./authentication-service/auth-node:/app
+      - /app/node_modules
+    ports:
+      - "${AUTH_NODE_PORT:-3026}:3026"
+    networks:
+      - gastreat-network
+
+  server-admin:
+    build:
+      context: ./server-admin
+      dockerfile: ../dockerfiles/Dockerfile.server-admin
+    container_name: gastreat_server_admin
+    restart: unless-stopped
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      auth-service:
+        condition: service_started
+      auth-node:
+        condition: service_started
+    environment:
+      NODE_ENV: development
+      PORT: 3022
+      URI_MONGODB: mongodb://mongodb:27017/${MONGO_DB_NAME:-gastreatGT}
+      JWT_SECRET: ${JWT_SECRET:-OyXm1PV8kTC3JtZ3Js5LMibbNUw}
+      JWT_ISSUER: ${JWT_ISSUER:-AuthService}
+      JWT_AUDIENCE: ${JWT_AUDIENCE:-AuthService}
+      ADMIN_ALLOWED_ORIGINS: ${FRONTEND_URL:-http://localhost:5174}
+    env_file:
+      - path: .env.docker
+        required: false
+    volumes:
+      - ./server-admin:/app
+      - /app/node_modules
+    ports:
+      - "${SERVER_ADMIN_PORT:-3022}:3022"
+    networks:
+      - gastreat-network
+
+  server-user:
+    build:
+      context: ./server-user
+      dockerfile: ../dockerfiles/Dockerfile.server-user
+    container_name: gastreat_server_user
+    restart: unless-stopped
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      server-admin:
+        condition: service_started
+    environment:
+      NODE_ENV: development
+      PORT: 3024
+      URI_MONGODB: mongodb://mongodb:27017/${MONGO_DB_NAME:-gastreatGT}
+      JWT_SECRET: ${JWT_SECRET:-OyXm1PV8kTC3JtZ3Js5LMibbNUw}
+      JWT_ISSUER: ${JWT_ISSUER:-AuthService}
+      JWT_AUDIENCE: ${JWT_AUDIENCE:-AuthService}
+      ADMIN_SERVICE_URL: http://server-admin:3022/gastreatGT/Admin/v1
+      INTERNAL_SERVICE_TOKEN: ${INTERNAL_SERVICE_TOKEN:-SecretKeyaDevOneIn6av2026Service}
+    env_file:
+      - path: .env.docker
+        required: false
+    volumes:
+      - ./server-user:/app
+      - /app/node_modules
+    ports:
+      - "${SERVER_USER_PORT:-3024}:3024"
+    networks:
+      - gastreat-network
+
+  client-admin:
+    build:
+      context: .
+      dockerfile: dockerfiles/Dockerfile.client-admin
+    container_name: gastreat_client_admin
+    restart: unless-stopped
+    depends_on:
+      auth-service:
+        condition: service_started
+      auth-node:
+        condition: service_started
+      server-admin:
+        condition: service_started
+    environment:
+      VITE_AUTH_URL: ${VITE_AUTH_URL:-http://localhost:5198/api/v1}
+      VITE_ADMIN_URL: ${VITE_ADMIN_URL:-http://localhost:3022/gastreatGT/Admin/v1}
+      VITE_CLOUDINARY_BASE_URL: ${VITE_CLOUDINARY_BASE_URL:-https://res.cloudinary.com/example/image/upload/}
+      CHOKIDAR_USEPOLLING: "true"
+    volumes:
+      - ./client-admin:/app
+      - /app/node_modules
+    ports:
+      - "${CLIENT_ADMIN_PORT:-5174}:5174"
+    networks:
+      - gastreat-network
+
+networks:
+  gastreat-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  mongo_data:

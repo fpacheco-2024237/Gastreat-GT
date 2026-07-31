@@ -1,0 +1,31 @@
+# Secretos locales (nunca commitear)
+.env
+.env.*
+!.env.example
+!.env.docker.example
+.env.docker
+
+# Microservicios clonados o enlazados localmente (cada uno es su propio repo git)
+client-admin
+client-admin/
+client-user
+client-user/
+server-admin
+server-admin/
+server-user
+server-user/
+authentication-service
+authentication-service/
+pg
+pg/
+
+# Artefactos locales
+.DS_Store
+Thumbs.db
+
+# GitHub (instrucciones locales de Copilot/IDE)
+.github/
+
+# Cursor (configuracion local del IDE)
+.cursor/
+

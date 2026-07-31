@@ -1,0 +1,15 @@
+FROM node:22-alpine
+
+WORKDIR /app
+
+RUN corepack enable && corepack prepare pnpm@9 --activate
+
+COPY client-admin/package.json client-admin/pnpm-lock.yaml ./
+
+RUN pnpm install --frozen-lockfile
+
+COPY client-admin/ ./
+
+EXPOSE 5174
+
+CMD ["node_modules/.bin/vite", "--host", "0.0.0.0", "--port", "5174"]
