@@ -20,12 +20,12 @@ import restaurantRoutes from '../src/restaurants/restaurant.routes.js';
 const BASE_PATH = '/gastreatGT/Admin/v1';
 
 const middlewares = (app) => {
-  app.use(express.urlencoded({ extended: false, limit: '10mb' }));
-  app.use(express.json({ limit: '10mb' }));
-  app.use(cors(corsOptions));
-  app.use(helmet(helmetConfiguration));
-  app.use(requestLimit);
-  app.use(morgan('dev'));
+    app.use(express.urlencoded({ extended: false, limit: '10mb' }));
+    app.use(express.json({ limit: '10mb' }));
+    app.use(cors(corsOptions));
+    app.use(helmet(helmetConfiguration));
+    app.use(requestLimit);
+    app.use(morgan('dev'));
 };
 
 const routes = (app) => {
@@ -33,7 +33,7 @@ const routes = (app) => {
     app.use(`${BASE_PATH}/products`, productRoutes);
     app.use(`${BASE_PATH}`, tableRoutes); // includes tables and reservations
     app.use(`${BASE_PATH}/orders`, orderRoutes);
-    app.use(`${BASE_PATH}/invoices`, invoiceRoutes);
+    app.use(`${BASE_PATH}/billing`, invoiceRoutes);
     app.use(`${BASE_PATH}/restaurants`, restaurantRoutes);
 
     app.get(`${BASE_PATH}/health`, (req, res) => {
@@ -64,7 +64,7 @@ export const initServer = async () => {
         routes(app);
 
         app.use(errorHandler);
-        
+
         app.listen(PORT, () => {
             console.log(`Server Gastreat GT Admin running on port: ${PORT}`);
             console.log(`Health check: http://localhost:${PORT}${BASE_PATH}/health`);

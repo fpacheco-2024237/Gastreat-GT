@@ -51,5 +51,13 @@ router.put(
 );
 router.delete('/:id', validateJWT, requireRole('ADMIN_ROLE'), validateId, productController.remove);
 router.patch('/:id/reactivate', validateJWT, requireRole('ADMIN_ROLE'), validateId, productController.reactivate);
+router.patch('/:id/status', validateJWT, requireRole('ADMIN_ROLE'), validateId, (req, res, next) => {
+  const { status } = req.body;
+  if (status === 'Agotado' || status === false || status === 'false') {
+    return productController.remove(req, res, next);
+  } else {
+    return productController.reactivate(req, res, next);
+  }
+});
 
 export default router;

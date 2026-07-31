@@ -7,6 +7,7 @@ import AppNavigator from './src/navigation/AppNavigator.jsx';
 
 export default function App() {
   return (
+    // Root del cliente: provider de safe area, status bar y navegacion.
     <SafeAreaProvider>
       <StatusBar barStyle="dark-content" backgroundColor={COLORS.background} />
       <AppNavigator />

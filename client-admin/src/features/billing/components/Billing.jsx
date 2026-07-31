@@ -4,11 +4,16 @@ import { useUIStore } from '../../auth/store/uiStore.js';
 import { Spinner } from '../../auth/components/Spinner.jsx';
 import { showError } from '../../../shared/utils/toast.js';
 
+const statusBadge = {
+  PENDIENTE: 'bg-yellow-100 text-yellow-700',
+  PAGADA: 'bg-green-100 text-green-700',
+  ANULADA: 'bg-red-100 text-red-700',
+};
+
 export const Billing = () => {
-  const { bills, selectedBill, loading, error, fetchBills, loadBillByOrder, payBill } = useBillingStore();
+  const { bills, selectedBill, loading, error, fetchBills, loadBillById, payBill, voidBill } = useBillingStore();
   const { openConfirm } = useUIStore();
-  const [paymentMethod, setPaymentMethod] = useState('Efectivo');
-  const [tip, setTip] = useState('0');
+  const [paymentMethod, setPaymentMethod] = useState('EFECTIVO');
 
   useEffect(() => {
     fetchBills();
@@ -18,22 +23,22 @@ export const Billing = () => {
     if (error) showError(error);
   }, [error]);
 
-  const handleLoadBill = async (orderId) => {
-    await loadBillByOrder(orderId);
-    setPaymentMethod('Efectivo');
-    setTip('0');
-  };
-
   const handlePay = (bill) => {
     openConfirm({
       title: 'Registrar pago',
-      message: `¿Registrar pago de Q${bill.total.toFixed(2)} para la orden ${bill.orderId}?`,
+      message: `¿Registrar pago de Q${bill.total.toFixed(2)} para la factura?`,
       onConfirm: async () => {
-        await payBill({
-          orderId: bill.orderId,
-          paymentMethod,
-          tip: Number(tip),
-        });
+        await payBill(bill._id, paymentMethod);
+      },
+    });
+  };
+
+  const handleVoid = (bill) => {
+    openConfirm({
+      title: 'Anular factura',
+      message: `¿Anular la factura de Q${bill.total.toFixed(2)}?`,
+      onConfirm: async () => {
+        await voidBill(bill._id, 'Anulada desde administración');
       },
     });
   };
@@ -61,23 +66,35 @@ export const Billing = () => {
                 <div key={bill._id} className='bg-white rounded-xl border border-gray-200 p-5'>
                   <div className='flex items-center justify-between gap-3'>
                     <div>
-                      <h2 className='text-lg font-semibold text-main-blue'>Factura de orden {bill.orderId}</h2>
-                      <p className='text-sm text-gray-500'>Mesa {bill.tableNumber}</p>
+                      <h2 className='text-lg font-semibold text-main-blue'>Factura #{bill._id?.slice(-6)}</h2>
+                      <p className='text-sm text-gray-500'>Orden: {typeof bill.orderId === 'object' ? bill.orderId?._id : bill.orderId}</p>
                     </div>
-                    <span className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold ${bill.status === 'Pagado' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`}>
+                    <span className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold ${statusBadge[bill.status] || 'bg-gray-100 text-gray-700'}`}>
                       {bill.status}
                     </span>
                   </div>
-                  <div className='mt-4 flex items-center justify-between'>
-                    <div className='text-sm text-gray-500'>Total:</div>
-                    <div className='text-xl font-semibold'>Q{bill.total?.toFixed(2) ?? '0.00'}</div>
+                  <div className='mt-4 grid grid-cols-3 gap-4 text-sm'>
+                    <div>
+                      <p className='text-gray-500'>Subtotal</p>
+                      <p className='font-semibold'>Q{bill.subtotal?.toFixed(2) ?? '0.00'}</p>
+                    </div>
+                    <div>
+                      <p className='text-gray-500'>IVA (12%)</p>
+                      <p className='font-semibold'>Q{bill.tax?.toFixed(2) ?? '0.00'}</p>
+                    </div>
+                    <div>
+                      <p className='text-gray-500'>Total</p>
+                      <p className='text-xl font-semibold text-main-blue'>Q{bill.total?.toFixed(2) ?? '0.00'}</p>
+                    </div>
                   </div>
-                  <button
-                    className='mt-4 w-full py-2 rounded-lg bg-main-blue text-white hover:opacity-90 transition text-sm'
-                    onClick={() => handleLoadBill(bill.orderId)}
-                  >
-                    Ver detalle
-                  </button>
+                  <div className='mt-4 flex gap-3'>
+                    <button
+                      className='px-4 py-2 rounded-lg bg-main-blue text-white hover:opacity-90 transition text-sm'
+                      onClick={() => loadBillById(bill._id)}
+                    >
+                      Ver detalle
+                    </button>
+                  </div>
                 </div>
               ))
             )}
@@ -91,69 +108,69 @@ export const Billing = () => {
               ) : (
                 <div className='space-y-4'>
                   <div className='space-y-2'>
+                    <p className='text-sm text-gray-500'>Factura</p>
+                    <p className='font-semibold'>#{selectedBill._id?.slice(-6)}</p>
+                  </div>
+                  <div className='space-y-2'>
                     <p className='text-sm text-gray-500'>Orden</p>
-                    <p className='font-semibold'>{selectedBill.orderId}</p>
+                    <p className='font-semibold'>{typeof selectedBill.orderId === 'object' ? selectedBill.orderId?._id : selectedBill.orderId}</p>
                   </div>
                   <div className='space-y-2'>
-                    <p className='text-sm text-gray-500'>Mesa</p>
-                    <p className='font-semibold'>{selectedBill.tableNumber}</p>
-                  </div>
-                  <div className='space-y-2'>
-                    <p className='text-sm text-gray-500'>Cajero</p>
-                    <p className='font-semibold'>{selectedBill.cashierId || 'N/A'}</p>
+                    <p className='text-sm text-gray-500'>Generada por</p>
+                    <p className='font-semibold'>{selectedBill.issuedBy}</p>
                   </div>
                   <div className='rounded-lg bg-slate-50 p-4 space-y-2'>
-                    {selectedBill.items?.map((item, index) => (
-                      <div key={index} className='flex justify-between text-sm'>
-                        <span>{item.name} x{item.quantity}</span>
-                        <span>Q{item.subtotal?.toFixed(2)}</span>
-                      </div>
-                    ))}
-                  </div>
-                  <div className='space-y-2 text-sm text-gray-500'>
-                    <div className='flex justify-between'>
+                    <div className='flex justify-between text-sm'>
                       <span>Subtotal</span>
                       <span>Q{selectedBill.subtotal?.toFixed(2) ?? '0.00'}</span>
                     </div>
-                    <div className='flex justify-between'>
-                      <span>IVA</span>
+                    <div className='flex justify-between text-sm'>
+                      <span>IVA (12%)</span>
                       <span>Q{selectedBill.tax?.toFixed(2) ?? '0.00'}</span>
                     </div>
-                    <div className='flex justify-between'>
-                      <span>Propina</span>
-                      <span>Q{selectedBill.tip?.toFixed(2) ?? '0.00'}</span>
-                    </div>
-                    <div className='flex justify-between font-semibold'>
+                    <div className='flex justify-between font-semibold text-main-blue'>
                       <span>Total</span>
                       <span>Q{selectedBill.total?.toFixed(2) ?? '0.00'}</span>
                     </div>
                   </div>
-                  {selectedBill.status !== 'Pagado' && (
-                    <div className='space-y-4'>
+
+                  {selectedBill.status === 'PENDIENTE' && (
+                    <div className='space-y-4 pt-4 border-t'>
                       <label className='block text-sm font-medium text-gray-700'>Método de pago</label>
                       <select
                         value={paymentMethod}
                         onChange={(event) => setPaymentMethod(event.target.value)}
                         className='w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-blue-500'
                       >
-                        <option value='Efectivo'>Efectivo</option>
-                        <option value='Tarjeta'>Tarjeta</option>
+                        <option value='EFECTIVO'>Efectivo</option>
+                        <option value='TARJETA'>Tarjeta</option>
+                        <option value='TRANSFERENCIA'>Transferencia</option>
                       </select>
-                      <label className='block text-sm font-medium text-gray-700'>Propina</label>
-                      <input
-                        type='number'
-                        min='0'
-                        step='0.01'
-                        value={tip}
-                        onChange={(event) => setTip(event.target.value)}
-                        className='w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-blue-500'
-                      />
                       <button
                         className='w-full py-2 rounded-lg bg-green-600 text-white hover:bg-green-700 transition'
                         onClick={() => handlePay(selectedBill)}
                       >
                         Registrar pago
                       </button>
+                      <button
+                        className='w-full py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 transition'
+                        onClick={() => handleVoid(selectedBill)}
+                      >
+                        Anular factura
+                      </button>
+                    </div>
+                  )}
+
+                  {selectedBill.status === 'PAGADA' && (
+                    <div className='pt-4 border-t'>
+                      <p className='text-sm text-green-700 font-semibold'>Pagada con {selectedBill.paymentMethod}</p>
+                    </div>
+                  )}
+
+                  {selectedBill.status === 'ANULADA' && (
+                    <div className='pt-4 border-t'>
+                      <p className='text-sm text-red-700 font-semibold'>Anulada</p>
+                      {selectedBill.voidReason && <p className='text-sm text-gray-500'>Motivo: {selectedBill.voidReason}</p>}
                     </div>
                   )}
                 </div>

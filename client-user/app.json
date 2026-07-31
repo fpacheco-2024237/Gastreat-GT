@@ -2,7 +2,11 @@
   "expo": {
     "name": "client-user",
     "slug": "client-user",
-    "platforms": ["ios", "android", "web"],
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
     "orientation": "portrait",
     "splash": {
       "image": "./assets/splash-icon.png",
@@ -12,6 +16,9 @@
     "assetBundlePatterns": [
       "assets/**/*"
     ],
-    "sdkVersion": "55.0.0"
+    "sdkVersion": "55.0.0",
+    "plugins": [
+      "expo-secure-store"
+    ]
   }
 }

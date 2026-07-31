@@ -8,6 +8,7 @@ export default function useAuth() {
   const [error, setError] = useState(null);
   const store = useAuthStore();
 
+  // Normaliza respuestas variantes del backend para login.
   const normalizeLoginResponse = (data) => {
     // tolerar { accessToken, refreshToken, userDetails } o { token, user }
     const accessToken = data.accessToken || data.token || data.access_token || null;
@@ -16,6 +17,7 @@ export default function useAuth() {
     return { accessToken, refreshToken, user };
   };
 
+  // Ejecuta el inicio de sesión y persiste token, usuario y refresh token.
   const handleLogin = async ({ emailOrUsername, password }) => {
     setLoading(true);
     setError(null);
@@ -34,6 +36,7 @@ export default function useAuth() {
     }
   };
 
+  // Registra un usuario nuevo sin exponer el rol desde el cliente.
   const handleRegister = async (payload) => {
     setLoading(true);
     setError(null);
@@ -49,9 +52,40 @@ export default function useAuth() {
     }
   };
 
+  // Verifica el correo electrónico con el token recibido por email.
+  const handleVerifyEmail = async ({ token }) => {
+    setLoading(true);
+    setError(null);
+    try {
+      await authClient.post('/verify-email', { token });
+      setLoading(false);
+      return { ok: true };
+    } catch (e) {
+      setError(e?.response?.data?.message || e.message || 'Error al verificar');
+      setLoading(false);
+      return { ok: false, error: e };
+    }
+  };
+
+  // Reenvía el correo de verificación.
+  const handleResendVerification = async ({ email }) => {
+    setLoading(true);
+    setError(null);
+    try {
+      await authClient.post('/resend-verification', { email });
+      setLoading(false);
+      return { ok: true };
+    } catch (e) {
+      setError(e?.response?.data?.message || e.message || 'Error al reenviar');
+      setLoading(false);
+      return { ok: false, error: e };
+    }
+  };
+
+  // Cierra sesión en la tienda y borra credenciales persistidas.
   const logout = async () => {
     await store.logout();
   };
 
-  return { handleLogin, handleRegister, loading, error, logout };
+  return { handleLogin, handleRegister, handleVerifyEmail, handleResendVerification, loading, error, logout };
 }

@@ -70,8 +70,7 @@ export const uploadBufferToCloudinary = (buffer, folder, originalName) => {
   });
 };
 
-// Uploader reutilizable para campos deportivos y equipos
-export const uploadFieldImage = createMemoryUploader();
-export const uploadTeamImage = createMemoryUploader();
+// Uploader reutilizable para imágenes del menú
+export const uploadProductImage = createMemoryUploader();
 
 export { cloudinary };

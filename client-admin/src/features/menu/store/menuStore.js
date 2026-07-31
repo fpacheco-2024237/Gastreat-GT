@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import * as menuApi from '../../../shared/api/menu.js';
 import { showError } from '../../../shared/utils/toast.js';
+import { useRestaurantStore } from '../../restaurants/store/restaurantStore.js';
 
 export const useMenuStore = create((set, get) => ({
   menuItems: [],
@@ -8,10 +9,16 @@ export const useMenuStore = create((set, get) => ({
   error: null,
   selectedItem: null,
 
-  fetchMenuItems: async () => {
+  fetchMenuItems: async (filters = {}) => {
     set({ loading: true, error: null });
     try {
-      const menuItems = await menuApi.getMenuItems();
+      const restaurantId = useRestaurantStore.getState().restaurantId;
+      const params = { ...filters };
+      if (restaurantId && !params.restaurantId) {
+        params.restaurantId = restaurantId;
+      }
+      const data = await menuApi.getMenuItems(params);
+      const menuItems = Array.isArray(data) ? data : [];
       set({ menuItems, loading: false });
     } catch (err) {
       const message = err.response?.data?.message || 'Error al obtener el menú';
@@ -23,7 +30,12 @@ export const useMenuStore = create((set, get) => ({
   createMenuItem: async (data) => {
     set({ loading: true, error: null });
     try {
-      await menuApi.createMenuItem(data);
+      const restaurantId = useRestaurantStore.getState().restaurantId;
+      const payload = { ...data };
+      if (restaurantId && !payload.restaurantId) {
+        payload.restaurantId = restaurantId;
+      }
+      await menuApi.createMenuItem(payload);
       await get().fetchMenuItems();
       set({ loading: false });
     } catch (err) {

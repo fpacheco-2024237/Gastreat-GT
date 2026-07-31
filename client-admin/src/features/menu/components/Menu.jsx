@@ -1,5 +1,6 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useMenuStore } from '../store/menuStore.js';
+import { useCategoryStore } from '../../categories/store/categoryStore.js';
 import { useUIStore } from '../../auth/store/uiStore.js';
 import { Spinner } from '../../auth/components/Spinner.jsx';
 import { showError } from '../../../shared/utils/toast.js';
@@ -7,13 +8,15 @@ import { showError } from '../../../shared/utils/toast.js';
 const initialForm = {
   name: '',
   description: '',
-  category: 'Comida',
+  categoryId: '',
   price: '',
+  stock: '',
   status: 'Disponible',
 };
 
 export const Menu = () => {
   const { menuItems, loading, error, fetchMenuItems, createMenuItem, updateMenuItem, toggleMenuItemStatus, deleteMenuItem } = useMenuStore();
+  const { categories, fetchCategories } = useCategoryStore();
   const { openConfirm } = useUIStore();
   const [openForm, setOpenForm] = useState(false);
   const [form, setForm] = useState(initialForm);
@@ -21,7 +24,8 @@ export const Menu = () => {
 
   useEffect(() => {
     fetchMenuItems();
-  }, [fetchMenuItems]);
+    fetchCategories();
+  }, [fetchMenuItems, fetchCategories]);
 
   useEffect(() => {
     if (error) showError(error);
@@ -29,14 +33,20 @@ export const Menu = () => {
 
   const isEditMode = Boolean(editingId);
 
+  const getCategoryName = (id) => {
+    const cat = categories.find((c) => c._id === id);
+    return cat ? cat.name : 'Categoría desconocida';
+  };
+
   const handleOpenForm = (item = null) => {
     if (item) {
       setEditingId(item._id);
       setForm({
         name: item.name || '',
         description: item.description || '',
-        category: item.category || 'Comida',
+        categoryId: item.categoryId || '',
         price: item.price ?? '',
+        stock: item.stock ?? '',
         status: item.status || 'Disponible',
       });
     } else {
@@ -48,16 +58,17 @@ export const Menu = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    if (!form.name || !form.category || form.price === '') {
-      showError('Nombre, categoría y precio son obligatorios.');
+    if (!form.name || !form.categoryId || form.price === '' || form.stock === '') {
+      showError('Nombre, categoría, stock y precio son obligatorios.');
       return;
     }
 
     const payload = {
       name: form.name,
       description: form.description,
-      category: form.category,
+      categoryId: form.categoryId,
       price: Number(form.price),
+      stock: Number(form.stock),
       status: form.status,
     };
 
@@ -88,11 +99,6 @@ export const Menu = () => {
       onConfirm: async () => deleteMenuItem(item._id),
     });
   };
-
-  const categoryOptions = useMemo(
-    () => ['Comida', 'Bebida', 'Postre', 'Entrada', 'Otro'],
-    []
-  );
 
   return (
     <div className='p-4'>
@@ -127,7 +133,8 @@ export const Menu = () => {
                       {item.status}
                     </span>
                   </div>
-                  <p className='text-sm text-gray-500 mb-3'>{item.category}</p>
+                  <p className='text-sm text-gray-500 mb-1'>{getCategoryName(item.categoryId)}</p>
+                  <p className='text-sm font-medium text-gray-700 mb-3'>Stock: {item.stock ?? 0}</p>
                   <p className='text-gray-600 text-sm mb-4'>{item.description || 'Sin descripción'}</p>
                   <div className='flex items-center justify-between gap-4'>
                     <span className='text-lg font-semibold'>Q{item.price}</span>
@@ -201,20 +208,32 @@ export const Menu = () => {
                 </label>
               </div>
 
-              <div className='grid gap-4 md:grid-cols-2'>
+              <div className='grid gap-4 md:grid-cols-3'>
                 <label className='space-y-2'>
                   <span className='text-sm font-medium text-gray-700'>Categoría</span>
                   <select
-                    value={form.category}
-                    onChange={(event) => setForm({ ...form, category: event.target.value })}
+                    value={form.categoryId}
+                    onChange={(event) => setForm({ ...form, categoryId: event.target.value })}
                     className='w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-blue-500'
                   >
-                    {categoryOptions.map((category) => (
-                      <option key={category} value={category}>
-                        {category}
+                    <option value=''>Seleccione...</option>
+                    {categories.map((cat) => (
+                      <option key={cat._id} value={cat._id}>
+                        {cat.name}
                       </option>
                     ))}
                   </select>
+                </label>
+                <label className='space-y-2'>
+                  <span className='text-sm font-medium text-gray-700'>Stock</span>
+                  <input
+                    type='number'
+                    min='0'
+                    value={form.stock}
+                    onChange={(event) => setForm({ ...form, stock: event.target.value })}
+                    className='w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-blue-500'
+                    placeholder='Ej. 50'
+                  />
                 </label>
                 <label className='space-y-2'>
                   <span className='text-sm font-medium text-gray-700'>Estado</span>

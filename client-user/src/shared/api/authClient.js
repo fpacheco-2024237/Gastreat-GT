@@ -1,76 +1,108 @@
 // File: src/shared/api/authClient.js
 import axios from 'axios';
 import { ENDPOINTS } from '../constants/endpoints.js';
-import * as SecureStore from 'expo-secure-store';
-import useAuthStore from '../store/authStore.js';
+import { useAuthStore, getRefreshToken } from '../store/authStore.js';
 
-const authBase = axios.create({ baseURL: ENDPOINTS.AUTH, headers: { 'Content-Type': 'application/json' } });
-
-const excludedPaths = ['/login', '/register', '/forgot-password', '/reset-password', '/verify-email', '/resend-verification'];
+const NO_REFRESH_ENDPOINTS = [
+  '/login',
+  '/register',
+  '/forgot-password',
+  '/reset-password',
+  '/verify-email',
+  '/resend-verification',
+];
 
 let isRefreshing = false;
 let failedQueue = [];
 
 const processQueue = (error, token = null) => {
-  failedQueue.forEach(prom => {
-    if (error) prom.reject(error);
-    else prom.resolve(token);
+  failedQueue.forEach((prom) => {
+    if (error) {
+      prom.reject(error);
+    } else {
+      prom.resolve(token);
+    }
   });
   failedQueue = [];
 };
 
-authBase.interceptors.request.use((config) => {
-  const token = useAuthStore.getState().token;
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
+const authClient = axios.create({
+  baseURL: ENDPOINTS.AUTH,
+  headers: {
+    'Content-Type': 'application/json',
+  },
 });
 
-authBase.interceptors.response.use((res) => res, async (err) => {
-  const originalRequest = err.config;
-  if (!originalRequest || !err.response) return Promise.reject(err);
-  if (err.response.status === 401 && !originalRequest._retry) {
-    // No refrescar en paths excluidos
-    const path = originalRequest.url || '';
-    if (excludedPaths.some(p => path.endsWith(p))) {
-      return Promise.reject(err);
+authClient.interceptors.request.use(
+  (config) => {
+    const token = useAuthStore.getState().token;
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
     }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
 
-    if (isRefreshing) {
-      return new Promise(function (resolve, reject) {
-        failedQueue.push({ resolve, reject });
-      }).then((token) => {
-        originalRequest.headers.Authorization = `Bearer ${token}`;
-        return authBase.request(originalRequest);
-      }).catch(e => Promise.reject(e));
-    }
+authClient.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const originalRequest = error.config;
 
-    originalRequest._retry = true;
-    isRefreshing = true;
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      const shouldSkipRefresh = NO_REFRESH_ENDPOINTS.some((endpoint) =>
+        originalRequest.url?.includes(endpoint)
+      );
 
-    try {
-      const refreshToken = await SecureStore.getItemAsync('refreshToken');
-      if (!refreshToken) throw new Error('No refresh token');
+      if (shouldSkipRefresh) {
+        return Promise.reject(error);
+      }
 
-      const response = await axios.post(`${ENDPOINTS.AUTH}/refresh`, { refreshToken });
-      const { accessToken } = response.data || {};
-      if (accessToken) {
+      if (isRefreshing) {
+        return new Promise((resolve, reject) => {
+          failedQueue.push({ resolve, reject });
+        })
+          .then((token) => {
+            originalRequest.headers.Authorization = `Bearer ${token}`;
+            return authClient(originalRequest);
+          })
+          .catch((err) => Promise.reject(err));
+      }
+
+      originalRequest._retry = true;
+      isRefreshing = true;
+
+      try {
+        const refreshToken = await getRefreshToken();
+        if (!refreshToken) {
+          throw new Error('No refresh token available');
+        }
+
+        const response = await axios.post(`${ENDPOINTS.AUTH}/refresh`, {
+          refreshToken,
+        });
+
+        const { accessToken, user } = response.data;
+
         useAuthStore.getState().setAccessToken(accessToken);
+        if (user) {
+          useAuthStore.getState().updateUser(user);
+        }
+
         processQueue(null, accessToken);
         originalRequest.headers.Authorization = `Bearer ${accessToken}`;
-        return authBase.request(originalRequest);
+        return authClient(originalRequest);
+      } catch (refreshError) {
+        processQueue(refreshError, null);
+        await useAuthStore.getState().logout();
+        return Promise.reject(refreshError);
+      } finally {
+        isRefreshing = false;
       }
-      throw new Error('No accessToken in refresh response');
-    } catch (refreshError) {
-      processQueue(refreshError, null);
-      await useAuthStore.getState().logout();
-      return Promise.reject(refreshError);
-    } finally {
-      isRefreshing = false;
     }
-  }
-  return Promise.reject(err);
-});
 
-export default authBase;
+    return Promise.reject(error);
+  }
+);
+
+export default authClient;

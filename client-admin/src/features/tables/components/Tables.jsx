@@ -7,8 +7,8 @@ import { showError } from '../../../shared/utils/toast.js';
 const initialForm = {
   number: '',
   capacity: '',
-  location: 'Interior',
-  status: 'Libre',
+  location: 'SALON_PRINCIPAL',
+  status: 'LIBRE',
 };
 
 export const Tables = () => {
@@ -32,10 +32,10 @@ export const Tables = () => {
     if (table) {
       setEditingId(table._id);
       setForm({
-        number: table.number ?? '',
+        number: table.tableNumber ?? '',
         capacity: table.capacity ?? '',
-        location: table.location || 'Interior',
-        status: table.status || 'Libre',
+        location: table.zone || 'SALON_PRINCIPAL',
+        status: table.status || 'LIBRE',
       });
     } else {
       setEditingId(null);
@@ -52,9 +52,9 @@ export const Tables = () => {
     }
 
     const payload = {
-      number: Number(form.number),
+      tableNumber: Number(form.number),
       capacity: Number(form.capacity),
-      location: form.location,
+      zone: form.location,
       status: form.status,
     };
 
@@ -70,10 +70,10 @@ export const Tables = () => {
   };
 
   const handleToggleStatus = (table) => {
-    const nextStatus = table.status === 'Libre' ? 'Ocupada' : 'Libre';
+    const nextStatus = table.status === 'LIBRE' ? 'OCUPADA' : 'LIBRE';
     openConfirm({
       title: 'Cambiar estado',
-      message: `¿Cambiar estado de la mesa ${table.number} a ${nextStatus}?`,
+      message: `¿Cambiar estado de la mesa ${table.tableNumber} a ${nextStatus}?`,
       onConfirm: async () => toggleTableStatus(table._id, nextStatus),
     });
   };
@@ -81,13 +81,13 @@ export const Tables = () => {
   const handleDelete = (table) => {
     openConfirm({
       title: 'Eliminar mesa',
-      message: `¿Eliminar mesa ${table.number}?`,
+      message: `¿Eliminar mesa ${table.tableNumber}?`,
       onConfirm: async () => deleteTable(table._id),
     });
   };
 
-  const statusOptions = useMemo(() => ['Libre', 'Ocupada', 'Sucia'], []);
-  const locationOptions = useMemo(() => ['Interior', 'Terraza', 'Exterior'], []);
+  const statusOptions = useMemo(() => ['LIBRE', 'OCUPADA', 'RESERVADA', 'INACTIVA'], []);
+  const locationOptions = useMemo(() => ['SALON_PRINCIPAL', 'TERRAZA', 'PRIVADO', 'BARRA'], []);
 
   return (
     <div className='p-4'>
@@ -117,13 +117,13 @@ export const Tables = () => {
               <div key={table._id} className='bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200'>
                 <div className='p-5'>
                   <div className='mb-3 flex items-center justify-between'>
-                    <h2 className='text-xl font-semibold text-main-blue'>Mesa {table.number}</h2>
-                    <span className={`px-3 py-1 rounded-full text-xs font-semibold ${table.status === 'Libre' ? 'bg-green-100 text-green-700' : table.status === 'Ocupada' ? 'bg-orange-100 text-orange-700' : 'bg-slate-100 text-slate-700'}`}>
+                    <h2 className='text-xl font-semibold text-main-blue'>Mesa {table.tableNumber}</h2>
+                    <span className={`px-3 py-1 rounded-full text-xs font-semibold ${table.status === 'LIBRE' ? 'bg-green-100 text-green-700' : table.status === 'OCUPADA' ? 'bg-orange-100 text-orange-700' : 'bg-slate-100 text-slate-700'}`}>
                       {table.status}
                     </span>
                   </div>
                   <p className='text-sm text-gray-500'>Capacidad: {table.capacity}</p>
-                  <p className='text-sm text-gray-500'>Ubicación: {table.location}</p>
+                  <p className='text-sm text-gray-500'>Ubicación: {table.zone}</p>
                   <div className='mt-5 flex gap-2 flex-wrap'>
                     <button
                       className='flex-1 py-2 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 transition text-sm'

@@ -23,5 +23,13 @@ router.post('/', validateJWT, requireRole('ADMIN_ROLE'), validateCreate, categor
 router.put('/:id', validateJWT, requireRole('ADMIN_ROLE'), validateId, categoryController.update);
 router.delete('/:id', validateJWT, requireRole('ADMIN_ROLE'), validateId, categoryController.remove);
 router.patch('/:id/reactivate', validateJWT, requireRole('ADMIN_ROLE'), validateId, categoryController.reactivate);
+router.patch('/:id/status', validateJWT, requireRole('ADMIN_ROLE'), validateId, (req, res, next) => {
+  const { status } = req.body;
+  if (status === false || status === 'false' || status === 'Inactivo') {
+    return categoryController.remove(req, res, next);
+  } else {
+    return categoryController.reactivate(req, res, next);
+  }
+});
 
 export default router;

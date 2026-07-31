@@ -1,0 +1,18 @@
+{
+  "name": "auth-service",
+  "version": "1.0.0",
+  "description": "Servicio de autenticación .NET dentro del monorepo",
+  "author": "Braulio Echeverria",
+  "scripts": {
+    "start": "dotnet run --project src/AuthService.Api",
+    "dev": "dotnet watch --project src/AuthService.Api",
+    "build": "dotnet build",
+    "test": "dotnet test",
+    "format": "dotnet format",
+    "format:check": "dotnet format --verify-no-changes",
+    "clean": "dotnet clean"
+  },
+  "dependencies": {
+    "express-async-handler": "^1.2.0"
+  }
+}

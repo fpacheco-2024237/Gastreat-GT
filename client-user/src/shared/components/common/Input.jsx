@@ -5,6 +5,7 @@ import { COLORS, SPACING, FONT_SIZE } from '../../constants/theme.js';
 
 export default function Input({ label, value, onChangeText, placeholder, error, secureTextEntry = false, style, ...rest }) {
   return (
+    // Campo de texto reutilizable con etiqueta y mensaje de error.
     <View style={{ marginBottom: SPACING.md }}>
       {label ? <Text style={{ marginBottom: 6, color: COLORS.text }}>{label}</Text> : null}
       <TextInput

@@ -1,6 +1,6 @@
 'use strict';
 
-import TableReservation from '../src/tables/tableReservation.model.js';
+import TableReservation from '../src/features/tables/tableReservation.model.js';
 
 /**
  * Middleware para detectar conflictos de horario en reservas de mesas.

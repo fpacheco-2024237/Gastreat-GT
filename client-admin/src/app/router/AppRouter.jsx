@@ -3,30 +3,51 @@ import { AuthPage } from '../../features/auth/pages/AuthPage.jsx';
 import { ProtecterRoute } from './ProtecterRoute.jsx';
 import { DashboardPage } from '../layouts/DashboardPage.jsx';
 import { RoleGuard } from './RoleGuard.jsx';
+import { RestaurantGuard } from './RestaurantGuard.jsx';
+import { RestaurantsPage } from '../../features/restaurants/pages/RestaurantsPage.jsx';
 import { Menu } from '../../features/menu/components/Menu.jsx';
 import { Tables } from '../../features/tables/components/Tables.jsx';
+import { Reservations } from '../../features/reservations/components/Reservations.jsx';
 import { Orders } from '../../features/orders/components/Orders.jsx';
 import { Billing } from '../../features/billing/components/Billing.jsx';
 import { Users } from '../../features/users/components/Users.jsx';
 import { VerifyEmailPage } from '../../features/auth/pages/VerifyEmailPage.jsx';
+import { Categories } from '../../features/categories/components/Categories.jsx';
+
 export const AppRouter = () => {
   return (
     <Routes>
       <Route path='/' element={<AuthPage />} />
       <Route path='/verify-email' element={<VerifyEmailPage />} />
+      
+      <Route 
+        path='/restaurants' 
+        element={
+          <ProtecterRoute>
+            <RoleGuard allowedRoles={['ADMIN_ROLE']}>
+              <RestaurantsPage />
+            </RoleGuard>
+          </ProtecterRoute>
+        } 
+      />
+
       <Route
         path='/dashboard/*'
         element={
           <ProtecterRoute>
             <RoleGuard allowedRoles={['ADMIN_ROLE']}>
-              <DashboardPage />
+              <RestaurantGuard>
+                <DashboardPage />
+              </RestaurantGuard>
             </RoleGuard>
           </ProtecterRoute>
         }
       >
         <Route index element={<Navigate to='menu' replace />} />
         <Route path='menu' element={<Menu />} />
+        <Route path='categories' element={<Categories />} />
         <Route path='tables' element={<Tables />} />
+        <Route path='reservations' element={<Reservations />} />
         <Route path='orders' element={<Orders />} />
         <Route path='billing' element={<Billing />} />
         <Route path='users' element={<Users />} />

@@ -1,0 +1,9 @@
+**/bin
+**/obj
+.env
+.env.*
+!.env.example
+.git
+.gitignore
+.README.md
+node_modules

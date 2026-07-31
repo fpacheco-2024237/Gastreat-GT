@@ -1,76 +1,102 @@
-# ========================
-#  Entorno y secretos
-# ========================
-.env
-.env.*
-!.env.example
-appsettings.json
-appsettings.Development.json
-
-# ========================
-#  Dependencias
-# ========================
-node_modules/
+# Dependencies
 **/node_modules/
 
-# ========================
-#  .NET / C#
-# ========================
-[Bb]in/
-[Oo]bj/
-.vs/
+# Environment files and secrets
+**/.env
+**/.env.*
+!**/.env.example
+!**/.env.*.example
+!**/.env.template
+!**/.env.*.template
 
-# ========================
-#  Logs
-# ========================
-logs/
-*.log
-npm-debug.log*
-pnpm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+**.env.docker*
 
-# ========================
-#  Build / Compilados
-# ========================
-dist/
-build/
-.expo/
-.expo-shared/
-.next/
+# Logs and runtime files
+**/logs/
+**/*.log
+**/npm-debug.log*
+**/yarn-debug.log*
+**/yarn-error.log*
+**/pnpm-debug.log*
+**/lerna-debug.log*
+**/pids/
+**/*.pid
+**/*.pid.lock
 
-# ========================
-#  Archivos temporales
-# ========================
-uploads/
-tmp/
-temp/
+# JavaScript / TypeScript build output and caches
+**/dist/
+**/build/
+**/coverage/
+**/.nyc_output/
+**/.cache/
+**/.parcel-cache/
+**/.eslintcache
+**/.vite/
+**/.turbo/
+**/.next/
+**/.expo/
+**/.expo-shared/
 
-# ========================
-#  Sistema Operativo
-# ========================
-Thumbs.db
-Desktop.ini
-.DS_Store
-.AppleDouble
-.LSOverride
-*~
+# React Native / Expo generated files
+**/web-build/
+**/*.jks
+**/*.keystore
+**/*.p8
+**/*.mobileprovision
 
-# ========================
-#  Editores e IDEs
-# ========================
-.vscode/
-!.vscode/extensions.json
-.idea/
-*.iml
+# .NET / Visual Studio build artifacts and user settings
+**/[Bb]in/
+**/[Oo]bj/
+**/[Ll]og/
+**/[Ll]ogs/
+**/[Pp]ublish/
+**/.vs/
+**/*.user
+**/*.rsuser
+**/*.suo
+**/*.userosscache
+**/*.sln.docstates
+**/TestResults/
+**/*.nupkg
+**/*.snupkg
+**/packages/
+**/project.assets.json
+**/project.nuget.cache
 
-# ========================
-#  Testing
-# ========================
-coverage/
-.nyc_output/
+# ASP.NET Core Data Protection keys generated locally
+**/src/AuthService.Api/keys/
 
-# ========================
-#  Misc
-# ========================
-*.pem
+# Editor and temporary files
+**.vscode/*
+**/*.code-workspace
+**/*.swp
+**/*.swo
+**/*~
+
+# Operating-system files
+**/.DS_Store
+**/Thumbs.db
+**/Desktop.ini
+
+# ASP.NET Core sensitive configuration (contains secrets in plaintext)
+**/appsettings.json
+**/appsettings.Development.json
+**/appsettings.Production.json
+**/appsettings.*.json
+**/secret.json
+
+# Docker environment with secrets
+.env.docker
+
+# Certificates and keys
+**/*.pfx
+**/*.pem
+**/*.key
+**/keys/
+
+# AI agent config (local only)
+**/.agents/
+**/.specify/
+
+# Expo local config
+**/.expo/

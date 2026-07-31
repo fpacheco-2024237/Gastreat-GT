@@ -1,17 +1,23 @@
 import { create } from 'zustand';
 import * as tableApi from '../../../shared/api/tables.js';
 import { showError } from '../../../shared/utils/toast.js';
+import { useRestaurantStore } from '../../restaurants/store/restaurantStore.js';
 
 export const useTableStore = create((set, get) => ({
   tables: [],
   loading: false,
   error: null,
 
-  fetchTables: async () => {
+  fetchTables: async (filters = {}) => {
     set({ loading: true, error: null });
     try {
-      const tables = await tableApi.getTables();
-      set({ tables, loading: false });
+      const restaurantId = useRestaurantStore.getState().restaurantId;
+      const params = { ...filters };
+      if (restaurantId && !params.restaurantId) {
+        params.restaurantId = restaurantId;
+      }
+      const tables = await tableApi.getTables(params);
+      set({ tables: Array.isArray(tables) ? tables : [], loading: false });
     } catch (err) {
       const message = err.response?.data?.message || 'Error al obtener mesas';
       showError(message);
@@ -22,7 +28,12 @@ export const useTableStore = create((set, get) => ({
   createTable: async (table) => {
     set({ loading: true, error: null });
     try {
-      await tableApi.createTable(table);
+      const restaurantId = useRestaurantStore.getState().restaurantId;
+      const payload = { ...table };
+      if (restaurantId && !payload.restaurantId) {
+        payload.restaurantId = restaurantId;
+      }
+      await tableApi.createTable(payload);
       await get().fetchTables();
       set({ loading: false });
     } catch (err) {

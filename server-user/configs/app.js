@@ -9,8 +9,8 @@ import { requestLimit } from '../middlewares/request-limit.js';
 import { corsOptions } from './cors-configuration.js';
 import { helmetConfiguration } from './helmet-configuration.js';
 import { errorHandler } from '../middlewares/handle-errors.js';
-import reservationRoutes from '../src/tables/reservation.routes.js';
-import orderRoutes from '../src/orders/order.routes.js';
+import reservationRoutes from '../src/features/tables/reservation.routes.js';
+import orderRoutes from '../src/features/orders/order.routes.js';
 
 const BASE_PATH = '/gastreatGT/User/v1';
 
