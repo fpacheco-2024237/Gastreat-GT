@@ -1,22 +1,26 @@
 'use strict';
 
 import { Sequelize } from 'sequelize';
-import pg from 'pg'; // <-- ¡LÍNEA AÑADIDA PARA VERCEL!
 import dotenv from 'dotenv';
+import { createRequire } from 'module'; // <-- Importamos la herramienta nativa
+
+// Creamos un require compatible con ESM para obligar la carga del módulo CommonJS
+const require = createRequire(import.meta.url);
+const pg = require('pg'); // <-- Obligamos a Node/Vercel a cargar el paquete físicamente
 
 dotenv.config();
 
-// Configuración de PostgreSQL (igual que la API .NET)
+// Configuración de PostgreSQL
 const databaseConfig = {
   dialect: 'postgres',
-  dialectModule: pg, // <-- ¡LÍNEA MÁGICA PARA VERCEL!
+  dialectModule: pg, // <-- Ahora sí, Sequelize recibe el módulo crudo perfecto
   logging: process.env.DB_SQL_LOGGING === 'true' ? console.log : false,
   define: {
-    freezeTableName: true, // Usar nombres exactos sin pluralización
+    freezeTableName: true, 
     timestamps: true,
     createdAt: 'created_at',
     updatedAt: 'updated_at',
-    underscored: true, // Usar snake_case para todos los campos
+    underscored: true, 
   },
   pool: {
     max: 10,
@@ -75,7 +79,7 @@ const gracefulShutdown = async (signal) => {
   try {
     await sequelize.close();
     console.log('PostgreSQL | Database connection closed successfully');
-    // En Vercel no es necesario hacer process.exit(), pero lo dejamos para desarrollo local
+    
     if (process.env.NODE_ENV !== 'production') {
        process.exit(0);
     }
@@ -90,7 +94,6 @@ const gracefulShutdown = async (signal) => {
   }
 };
 
-// Handle different termination signals
 process.on('SIGINT', () => gracefulShutdown('SIGINT'));
 process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
-process.on('SIGUSR2', () => gracefulShutdown('SIGUSR2')); // For nodemon restarts
+process.on('SIGUSR2', () => gracefulShutdown('SIGUSR2'));
