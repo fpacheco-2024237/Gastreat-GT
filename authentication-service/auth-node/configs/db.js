@@ -10,6 +10,15 @@ const pg = require('pg'); // <-- Obligamos a Node/Vercel a cargar el paquete fí
 
 dotenv.config();
 
+try {
+  const pg = require('pg');
+  console.log('PG encontrado:', require.resolve('pg'));
+} catch (e) {
+  console.error('PG NO encontrado');
+  console.error(e);
+  throw e;
+}
+
 // Configuración de PostgreSQL
 const databaseConfig = {
   dialect: 'postgres',

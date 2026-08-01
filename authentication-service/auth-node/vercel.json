@@ -1,6 +1,6 @@
 {
     "version": 2,
-    "installCommand": "pnpm install --ignore-workspace --shamefully-hoist",
+    "installCommand": "pnpm install",
     "builds": [
         {
             "src": "index.js",
