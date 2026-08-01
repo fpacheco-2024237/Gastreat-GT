@@ -1,2 +1,6 @@
+packages:
+  # Agregamos la ruta exacta de tu API para que pnpm la reconozca
+  - 'authentication-service/auth-node'
+
 allowBuilds:
   argon2: false
