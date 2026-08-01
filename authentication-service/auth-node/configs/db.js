@@ -1,6 +1,7 @@
 'use strict';
 
 import { Sequelize } from 'sequelize';
+import pg from 'pg'; // <-- ¡LÍNEA AÑADIDA PARA VERCEL!
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -8,6 +9,7 @@ dotenv.config();
 // Configuración de PostgreSQL (igual que la API .NET)
 const databaseConfig = {
   dialect: 'postgres',
+  dialectModule: pg, // <-- ¡LÍNEA MÁGICA PARA VERCEL!
   logging: process.env.DB_SQL_LOGGING === 'true' ? console.log : false,
   define: {
     freezeTableName: true, // Usar nombres exactos sin pluralización
@@ -73,13 +75,18 @@ const gracefulShutdown = async (signal) => {
   try {
     await sequelize.close();
     console.log('PostgreSQL | Database connection closed successfully');
-    process.exit(0);
+    // En Vercel no es necesario hacer process.exit(), pero lo dejamos para desarrollo local
+    if (process.env.NODE_ENV !== 'production') {
+       process.exit(0);
+    }
   } catch (error) {
     console.error(
       'PostgreSQL | Error during graceful shutdown:',
       error.message
     );
-    process.exit(1);
+    if (process.env.NODE_ENV !== 'production') {
+       process.exit(1);
+    }
   }
 };
 
