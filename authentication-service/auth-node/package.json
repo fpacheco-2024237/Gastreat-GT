@@ -4,6 +4,9 @@
   "description": "API REST de autenticación robusta con Node.js y PostgreSQL",
   "main": "index.js",
   "type": "module",
+  "engines": {
+    "node": ">=20 <21"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "NODE_ENV=production node index.js",

@@ -8,7 +8,7 @@ Servicio de autenticación que proporciona registro, login, gestión de perfiles
 
 ## 🛠️ Tech Stack
 
-- **Runtime**: Node.js 18+ (ESM)
+- **Runtime**: Node.js 20 (ESM)
 - **Framework**: Express 5.x
 - **Base de Datos**: PostgreSQL 14+
 - **ORM**: Sequelize 6.x
@@ -84,6 +84,35 @@ ADMIN_ALLOWED_ORIGINS=http://localhost:5173
 VERIFICATION_EMAIL_EXPIRY_HOURS=24
 PASSWORD_RESET_EXPIRY_HOURS=1
 ```
+
+## Despliegue en Vercel
+
+El archivo `vercel.json` redirige todas las solicitudes a `api/index.js`, el
+handler serverless de este servicio. No se debe iniciar `app.listen()` en
+Vercel: la plataforma administra el servidor HTTP.
+
+1. Importa el repositorio en Vercel y configura `authentication-service/auth-node`
+   como **Root Directory**.
+2. Mantén `pnpm` como gestor de paquetes; Vercel ejecutará
+   `pnpm install --frozen-lockfile`.
+3. En **Settings > Environment Variables**, configura para Production (y
+   Preview si aplica):
+
+   - `DATABASE_URL` con la URL de PostgreSQL de producción.
+   - `DB_SSL=true` si la base de datos administrada exige TLS.
+   - `JWT_SECRET`, `JWT_EXPIRES_IN`, `JWT_REFRESH_EXPIRES_IN`, `JWT_ISSUER`
+     y `JWT_AUDIENCE`.
+   - `SMTP_HOST`, `SMTP_PORT`, `SMTP_ENABLE_SSL`, `SMTP_USERNAME`,
+     `SMTP_PASSWORD`, `EMAIL_FROM` y `EMAIL_FROM_NAME`.
+   - `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`,
+     `CLOUDINARY_API_SECRET`, `CLOUDINARY_BASE_URL`, `CLOUDINARY_FOLDER` y
+     `CLOUDINARY_DEFAULT_AVATAR_FILENAME`.
+   - `ALLOWED_ORIGINS`, `ADMIN_ALLOWED_ORIGINS` y `FRONTEND_URL` con las URLs
+     HTTPS de los clientes desplegados.
+   - `NODE_ENV=production` y `DB_SQL_LOGGING=false`.
+
+No subas el archivo `.env` ni credenciales al repositorio. Tras el despliegue,
+verifica `GET /api/v1/health` en el dominio generado por Vercel.
 
 ## 📂 Estructura
 
