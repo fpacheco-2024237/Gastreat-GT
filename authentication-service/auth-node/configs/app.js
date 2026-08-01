@@ -30,6 +30,14 @@ const middlewares = (app) => {
 };
 
 const routes = (app) => {
+  app.get('/', (_req, res) => {
+    res.status(200).json({
+      status: 'Healthy',
+      service: 'Gastreat GT Authentication Service',
+      healthCheck: `${BASE_PATH}/health`,
+    });
+  });
+
   app.use(`${BASE_PATH}/auth`, authRoutes);
   app.use(`${BASE_PATH}/users`, userRoutes);
 
