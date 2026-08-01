@@ -1,6 +1,6 @@
 {
     "version": 2,
-    "installCommand": "HUSKY=0 pnpm install",
+    "installCommand": "pnpm install",
     "builds": [
         {
             "src": "index.js",
