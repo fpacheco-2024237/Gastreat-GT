@@ -2,19 +2,34 @@
 
 import { Sequelize } from 'sequelize';
 import dotenv from 'dotenv';
+import { createRequire } from 'module'; // <-- Importamos la herramienta nativa
+
+// Creamos un require compatible con ESM para obligar la carga del módulo CommonJS
+const require = createRequire(import.meta.url);
+const pg = require('pg'); // <-- Obligamos a Node/Vercel a cargar el paquete físicamente
 
 dotenv.config();
 
-// Configuración de PostgreSQL (igual que la API .NET)
+try {
+  const pg = require('pg');
+  console.log('PG encontrado:', require.resolve('pg'));
+} catch (e) {
+  console.error('PG NO encontrado');
+  console.error(e);
+  throw e;
+}
+
+// Configuración de PostgreSQL
 const databaseConfig = {
   dialect: 'postgres',
+  dialectModule: pg, // <-- Ahora sí, Sequelize recibe el módulo crudo perfecto
   logging: process.env.DB_SQL_LOGGING === 'true' ? console.log : false,
   define: {
-    freezeTableName: true, // Usar nombres exactos sin pluralización
+    freezeTableName: true, 
     timestamps: true,
     createdAt: 'created_at',
     updatedAt: 'updated_at',
-    underscored: true, // Usar snake_case para todos los campos
+    underscored: true, 
   },
   pool: {
     max: 10,
@@ -73,17 +88,21 @@ const gracefulShutdown = async (signal) => {
   try {
     await sequelize.close();
     console.log('PostgreSQL | Database connection closed successfully');
-    process.exit(0);
+    
+    if (process.env.NODE_ENV !== 'production') {
+       process.exit(0);
+    }
   } catch (error) {
     console.error(
       'PostgreSQL | Error during graceful shutdown:',
       error.message
     );
-    process.exit(1);
+    if (process.env.NODE_ENV !== 'production') {
+       process.exit(1);
+    }
   }
 };
 
-// Handle different termination signals
 process.on('SIGINT', () => gracefulShutdown('SIGINT'));
 process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
-process.on('SIGUSR2', () => gracefulShutdown('SIGUSR2')); // For nodemon restarts
+process.on('SIGUSR2', () => gracefulShutdown('SIGUSR2'));
