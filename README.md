@@ -8,11 +8,7 @@
 - `server-admin/` — Backend administrativo en Node.js + Express + MongoDB.
 - `client-admin/` — Frontend administrativo en React + Vite.
 - `gastreat_db/` — Configuración de Docker Compose para PostgreSQL.
-- `.github/` — Workflows de CI y reglas de GitHub.
-- `CONTRIBUTING.md` — Convenciones de contribución y flujo de ramas.
-- `CHANGELOG.md` — Historial de versiones.
 - `LICENSE` — Licencia MIT.
-- `Gastreat GT.postman_collection.json` — Colección Postman de referencia.
 
 ## Flujo de desarrollo recomendado
 
@@ -68,12 +64,8 @@ docker compose -f "c:\Proyectos 2026\Gastreat GT\gastreat_db\docker-compose.yml"
 - `server-admin/README.md`
 - `client-admin/README.md`
 - `gastreat_db/README.md`
-- `CONTRIBUTING.md`
-- `CHANGELOG.md`
 - `LICENSE`
-- `.github/workflows/ci.yml`
 - `docker-compose.yml`
-- `Gastreat GT.postman_collection.json`
 
 ## Convenciones de commits
 
