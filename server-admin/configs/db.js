@@ -1,6 +1,20 @@
 import mongoose from 'mongoose';
 
+let connectionPromise;
+
 export const dbConnection = async () => {
+  if (mongoose.connection.readyState === 1) {
+    return mongoose.connection;
+  }
+
+  if (connectionPromise) {
+    return connectionPromise;
+  }
+
+  if (!process.env.URI_MONGODB) {
+    throw new Error('URI_MONGODB no est\u00e1 configurada');
+  }
+
   try {
     mongoose.connection.on('error', () => {
       console.log('MongoDB | no se pudo conectar a mongoDB');
@@ -27,13 +41,15 @@ export const dbConnection = async () => {
       console.log('MongoDB | desconectado de mongoDB');
     });
 
-    await mongoose.connect(process.env.URI_MONGODB, {
+    connectionPromise = mongoose.connect(process.env.URI_MONGODB, {
       serverSelectionTimeoutMS: 5000,
       maxPoolSize: 10,
     });
+    return await connectionPromise;
   } catch (error) {
     console.log(`Error al conectar la db: ${error}`);
-    process.exit(1);
+    connectionPromise = undefined;
+    throw error;
   }
 };
 

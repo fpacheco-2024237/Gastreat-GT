@@ -29,6 +29,14 @@ const middlewares = (app) => {
 };
 
 const routes = (app) => {
+    app.get('/', (req, res) => {
+        res.status(200).json({
+            status: 'Healthy',
+            service: 'Gastreat GT Admin Server',
+            healthCheck: `${BASE_PATH}/health`
+        });
+    });
+
     app.use(`${BASE_PATH}/categories`, categoryRoutes);
     app.use(`${BASE_PATH}/products`, productRoutes);
     app.use(`${BASE_PATH}`, tableRoutes); // includes tables and reservations
@@ -53,17 +61,17 @@ const routes = (app) => {
     });
 };
 
+export const app = express();
+app.set('trust proxy', 1);
+middlewares(app);
+routes(app);
+app.use(errorHandler);
+
 export const initServer = async () => {
-    const app = express();
     const PORT = process.env.PORT;
-    app.set('trust proxy', 1);
 
     try {
-        middlewares(app);
         await dbConnection();
-        routes(app);
-
-        app.use(errorHandler);
 
         app.listen(PORT, () => {
             console.log(`Server Gastreat GT Admin running on port: ${PORT}`);
