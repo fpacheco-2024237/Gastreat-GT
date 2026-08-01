@@ -37,30 +37,38 @@ const routes = (app) => {
     res.status(200).json({
       status: 'Healthy',
       timestamp: new Date().toISOString(),
-      service: 'KinalSports Authentication Service',
+      service: 'Gastreat GT Authentication Service',
     });
   });
-  // 404 handler (standardized)
-  app.use(notFound);
 };
 
+// ── Shared app instance ─────────────────────────────────────────────
+const app = express();
+app.set('trust proxy', 1);
+
+middlewares(app);
+routes(app);
+app.use(notFound);
+app.use(errorHandler);
+
+export { app };
+
+// ── Local / standalone server ───────────────────────────────────────
+let dbInitialized = false;
+
 export const initServer = async () => {
-  const app = express();
   const PORT = process.env.PORT;
-  app.set('trust proxy', 1);
 
   try {
-    await dbConnection();
-    // Seed essential data (roles)
-    const { seedRoles } = await import('../helpers/role-seed.js');
-    await seedRoles();
-    middlewares(app);
-    routes(app);
-
-    app.use(errorHandler);
+    if (!dbInitialized) {
+      await dbConnection();
+      const { seedRoles } = await import('../helpers/role-seed.js');
+      await seedRoles();
+      dbInitialized = true;
+    }
 
     app.listen(PORT, () => {
-      console.log(`KinalSports Auth Server running on port ${PORT}`);
+      console.log(`Gastreat GT Auth Server running on port ${PORT}`);
       console.log(`Health check: http://localhost:${PORT}${BASE_PATH}/health`);
     });
   } catch (err) {
