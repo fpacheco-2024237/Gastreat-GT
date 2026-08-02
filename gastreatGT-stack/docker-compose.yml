@@ -56,7 +56,7 @@ services:
         Host=postgres;Port=5432;Database=${POSTGRES_DB:-gastreat};
         Username=${POSTGRES_USER:-gastreat_db};Password=${POSTGRES_PASSWORD:-eat}
       AppSettings__FrontendUrl: ${FRONTEND_URL:-http://localhost:5174}
-      JwtSettings__SecretKey: ${JWT_SECRET:-OyXm1PV8kTC3JtZ3Js5LMibbNUw}
+      JwtSettings__SecretKey: ${JWT_SECRET:-secret_jwt}
       JwtSettings__Issuer: ${JWT_ISSUER:-AuthService}
       JwtSettings__Audience: ${JWT_AUDIENCE:-AuthService}
     env_file:
@@ -97,7 +97,7 @@ services:
       DEFAULT_CONNECTION: >-
         Host=postgres;Port=5432;Database=${POSTGRES_DB:-gastreatGT};
         Username=${POSTGRES_USER:-gastreat_db};Password=${POSTGRES_PASSWORD:-eat}
-      JWT_SECRET: ${JWT_SECRET:-OyXm1PV8kTC3JtZ3Js5LMibbNUw}
+      JWT_SECRET: ${JWT_SECRET:-secret_jwt}
       JWT_ISSUER: ${JWT_ISSUER:-AuthService}
       JWT_AUDIENCE: ${JWT_AUDIENCE:-AuthService}
       FRONTEND_URL: ${FRONTEND_URL:-http://localhost:5174}
@@ -129,7 +129,7 @@ services:
       NODE_ENV: development
       PORT: 3022
       URI_MONGODB: mongodb://mongodb:27017/${MONGO_DB_NAME:-gastreatGT}
-      JWT_SECRET: ${JWT_SECRET:-OyXm1PV8kTC3JtZ3Js5LMibbNUw}
+      JWT_SECRET: ${JWT_SECRET:-secret_jwt}
       JWT_ISSUER: ${JWT_ISSUER:-AuthService}
       JWT_AUDIENCE: ${JWT_AUDIENCE:-AuthService}
       ADMIN_ALLOWED_ORIGINS: ${FRONTEND_URL:-http://localhost:5174}
@@ -159,11 +159,11 @@ services:
       NODE_ENV: development
       PORT: 3024
       URI_MONGODB: mongodb://mongodb:27017/${MONGO_DB_NAME:-gastreatGT}
-      JWT_SECRET: ${JWT_SECRET:-OyXm1PV8kTC3JtZ3Js5LMibbNUw}
+      JWT_SECRET: ${JWT_SECRET:-secret_jwt}
       JWT_ISSUER: ${JWT_ISSUER:-AuthService}
       JWT_AUDIENCE: ${JWT_AUDIENCE:-AuthService}
       ADMIN_SERVICE_URL: http://server-admin:3022/gastreatGT/Admin/v1
-      INTERNAL_SERVICE_TOKEN: ${INTERNAL_SERVICE_TOKEN:-SecretKeyaDevOneIn6av2026Service}
+      INTERNAL_SERVICE_TOKEN: ${INTERNAL_SERVICE_TOKEN:-internal_token}
     env_file:
       - path: .env.docker
         required: false
