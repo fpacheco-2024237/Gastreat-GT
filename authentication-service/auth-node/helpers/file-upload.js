@@ -4,10 +4,19 @@ import { v4 as uuidv4 } from 'uuid';
 import { config } from '../configs/config.js';
 import fs from 'fs';
 
+// En Vercel, el filesystem es read-only excepto /tmp
+const isVercel = !!process.env.VERCEL;
+const uploadDir = isVercel ? '/tmp/uploads' : config.upload.uploadPath;
+
 // Crear el directorio de uploads si no existe
 const createUploadDir = () => {
-  if (!fs.existsSync(config.upload.uploadPath)) {
-    fs.mkdirSync(config.upload.uploadPath, { recursive: true });
+  try {
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir, { recursive: true });
+    }
+  } catch (err) {
+    // En Vercel el directorio puede no persistir entre requests, pero /tmp siempre existe
+    console.warn('Could not create upload dir:', err.message);
   }
 };
 
@@ -15,7 +24,7 @@ const createUploadDir = () => {
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     createUploadDir();
-    cb(null, config.upload.uploadPath);
+    cb(null, uploadDir);
   },
   filename: (req, file, cb) => {
     const uniqueName = `${uuidv4()}${path.extname(file.originalname)}`;
@@ -80,7 +89,7 @@ export const handleUploadError = (error, req, res, next) => {
 
 export const deleteFile = (filename) => {
   try {
-    const filePath = path.join(config.upload.uploadPath, filename);
+    const filePath = path.join(uploadDir, filename);
     if (fs.existsSync(filePath)) {
       fs.unlinkSync(filePath);
       return true;
