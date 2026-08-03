@@ -97,9 +97,7 @@ services:
       DEFAULT_CONNECTION: >-
         Host=postgres;Port=5432;Database=${POSTGRES_DB:-gastreatGT};
         Username=${POSTGRES_USER:-gastreat_db};Password=${POSTGRES_PASSWORD:-eat}
-      JWT_SECRET: ${JWT_SECRET:-secret_jwt}
-      JWT_ISSUER: ${JWT_ISSUER:-AuthService}
-      JWT_AUDIENCE: ${JWT_AUDIENCE:-AuthService}
+      DATABASE_URL:
       FRONTEND_URL: ${FRONTEND_URL:-http://localhost:5174}
     env_file:
       - path: .env.docker
@@ -128,10 +126,7 @@ services:
     environment:
       NODE_ENV: development
       PORT: 3022
-      URI_MONGODB: mongodb://mongodb:27017/${MONGO_DB_NAME:-gastreatGT}
-      JWT_SECRET: ${JWT_SECRET:-secret_jwt}
-      JWT_ISSUER: ${JWT_ISSUER:-AuthService}
-      JWT_AUDIENCE: ${JWT_AUDIENCE:-AuthService}
+      URI_MONGODB: mongodb://mongodb:27017/${MONGO_DB_NAME:-GastreatGT}
       ADMIN_ALLOWED_ORIGINS: ${FRONTEND_URL:-http://localhost:5174}
     env_file:
       - path: .env.docker
@@ -158,12 +153,8 @@ services:
     environment:
       NODE_ENV: development
       PORT: 3024
-      URI_MONGODB: mongodb://mongodb:27017/${MONGO_DB_NAME:-gastreatGT}
-      JWT_SECRET: ${JWT_SECRET:-secret_jwt}
-      JWT_ISSUER: ${JWT_ISSUER:-AuthService}
-      JWT_AUDIENCE: ${JWT_AUDIENCE:-AuthService}
       ADMIN_SERVICE_URL: http://server-admin:3022/gastreatGT/Admin/v1
-      INTERNAL_SERVICE_TOKEN: ${INTERNAL_SERVICE_TOKEN:-internal_token}
+      INTERNAL_SERVICE_TOKEN: ${INTERNAL_SERVICE_TOKEN:-secret_internal_token}
     env_file:
       - path: .env.docker
         required: false
@@ -189,7 +180,7 @@ services:
       server-admin:
         condition: service_started
     environment:
-      VITE_AUTH_URL: ${VITE_AUTH_URL:-http://localhost:5198/api/v1}
+      VITE_AUTH_URL: ${VITE_AUTH_URL:-http://localhost:3026/api/v1}
       VITE_ADMIN_URL: ${VITE_ADMIN_URL:-http://localhost:3022/gastreatGT/Admin/v1}
       VITE_CLOUDINARY_BASE_URL: ${VITE_CLOUDINARY_BASE_URL:-https://res.cloudinary.com/example/image/upload/}
       CHOKIDAR_USEPOLLING: "true"

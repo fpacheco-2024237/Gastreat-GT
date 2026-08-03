@@ -11,6 +11,7 @@ import { helmetConfiguration } from './helmet-configuration.js';
 import { errorHandler } from '../middlewares/handle-errors.js';
 import reservationRoutes from '../src/features/tables/reservation.routes.js';
 import orderRoutes from '../src/features/orders/order.routes.js';
+import restaurantRoutes from '../src/features/restaurants/restaurant.routes.js';
 
 const BASE_PATH = '/gastreatGT/User/v1';
 
@@ -24,6 +25,7 @@ const middlewares = (app) => {
 };
 
 const routes = (app) => {
+  app.use(`${BASE_PATH}/restaurants`, restaurantRoutes);
   app.use(`${BASE_PATH}/reservations`, reservationRoutes);
   app.use(`${BASE_PATH}/orders`, orderRoutes);
 

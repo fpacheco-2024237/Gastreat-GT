@@ -8,10 +8,9 @@
 **/bin
 **/obj
 **/uploads
-server-admin
-server-user
-authentication-service
+**/dist
+gastreatGT-stack
+gastreat_db
 client-admin/node_modules
 client-admin/dist
 *.md
-!dockerfiles/**

@@ -3,9 +3,8 @@
   <head>
     <meta charset="UTF-8" />
 
-    <link rel="icon" type="image/png" href="./src/assets/img/gastreat_gt.png" />
-    <link rel="apple-touch-icon" href="/icons/icon-192.png" />
-    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="icon" type="image/png" href="/assets/gastreat_gt-2YfOZuB9.png" />
+    <link rel="apple-touch-icon" href="/assets/gastreat_gt-2YfOZuB9.png" />
 
     <meta
       name="viewport"
@@ -21,5 +20,12 @@
     <div id="root"></div>
 
     <script type="module" src="/src/app/main.jsx"></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistrations().then(function(registrations) {
+          for (let registration of registrations) { registration.unregister(); }
+        });
+      }
+    </script>
   </body>
 </html>

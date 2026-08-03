@@ -43,6 +43,9 @@
 **/*.keystore
 **/*.p8
 **/*.mobileprovision
+**/.github/
+**/.agents/
+**/specs/
 
 # .NET / Visual Studio build artifacts and user settings
 **/[Bb]in/
@@ -97,6 +100,10 @@
 # AI agent config (local only)
 **/.agents/
 **/.specify/
+**/.claude/
+**/.firebase/
+**/.specify/
+**metro-clear.log
 
 # Expo local config
 **/.expo/

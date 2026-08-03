@@ -42,10 +42,10 @@ export const sendVerificationEmail = async (email, name, verificationToken) => {
     const mailOptions = {
       from: `${config.smtp.fromName} <${config.smtp.fromEmail}>`,
       to: email,
-      subject: 'Verifica tu correo electrónico - Kinal Sports',
+      subject: 'Verifica tu correo electrónico - Gastreat GT',
       html: `
-        <h2>¡Bienvenido a Kinal Sports, ${name}!</h2>
-        <p>Por favor, verifica tu correo electrónico para tu cuenta de Kinal Sports haciendo clic en el siguiente enlace:</p>
+        <h2>¡Bienvenido a Gastreat GT, ${name}!</h2>
+        <p>Por favor, verifica tu correo electrónico para tu cuenta de Gastreat GT haciendo clic en el siguiente enlace:</p>
         <a href='${verificationUrl}' style='background-color: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;'>
             Verificar correo
         </a>
@@ -75,11 +75,11 @@ export const sendPasswordResetEmail = async (email, name, resetToken) => {
     const mailOptions = {
       from: `${config.smtp.fromName} <${config.smtp.fromEmail}>`,
       to: email,
-      subject: 'Restablece tu contraseña - Kinal Sports',
+      subject: 'Restablece tu contraseña - Gastreat GT',
       html: `
-        <h2>Solicitud de restablecimiento de contraseña - Kinal Sports</h2>
+        <h2>Solicitud de restablecimiento de contraseña - Gastreat GT</h2>
         <p>Hola ${name},</p>
-        <p>Este mensaje es de Kinal Sports.</p>
+        <p>Este mensaje es de Gastreat GT.</p>
         <p>Solicitaste restablecer tu contraseña. Haz clic en el siguiente enlace para restablecerla:</p>
         <a href='${resetUrl}' style='background-color: #dc3545; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;'>
             Restablecer contraseña
@@ -107,9 +107,9 @@ export const sendWelcomeEmail = async (email, name) => {
     const mailOptions = {
       from: `${config.smtp.fromName} <${config.smtp.fromEmail}>`,
       to: email,
-      subject: '¡Bienvenido a Kinal Sports!',
+      subject: '¡Bienvenido a Gastreat GT!',
       html: `
-        <h2>¡Bienvenido a Kinal Sports, ${name}!</h2>
+        <h2>¡Bienvenido a Gastreat GT, ${name}!</h2>
         <p>Tu cuenta ha sido verificada y activada exitosamente.</p>
         <p>Ahora puedes disfrutar de todas las funciones de nuestra plataforma.</p>
         <p>Si tienes alguna pregunta, no dudes en contactar a nuestro equipo de soporte.</p>
