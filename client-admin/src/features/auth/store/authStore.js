@@ -51,8 +51,8 @@ export const useAuthStore = create(
         try {
           set({ loading: true, error: null });
           const { data } = await loginRequest({ emailOrUsername, password });
-          const role = data?.user?.role;
-          console.log(role);
+          const user = data.userDetails || data.user || data.user_details || null;
+          const role = user?.role;
           if (role !== 'ADMIN_ROLE') {
             const message = 'No tienes permisos para acceder a esta aplicación';
             set({
@@ -69,15 +69,13 @@ export const useAuthStore = create(
           }
 
           set({
-            user: data.user,
+            user,
             token: data.accessToken,
             refreshToken: data.refreshToken,
-            expiresAt: data.expiresAt,
+            expiresAt: data.expiresAt || data.expiresIn,
             isAuthenticated: true,
             loading: false,
           });
-          console.log(data.accessToken);
-          console.log(data.expiresAt);
           return { success: true };
         } catch (err) {
           const message = err.response?.data?.message || 'Error al iniciar sesión';

@@ -334,6 +334,27 @@ export const findUserByPasswordResetToken = async (token) => {
   }
 };
 
+export const findAllUsers = async () => {
+  try {
+    const users = await User.findAll({
+      include: [
+        { model: UserProfile, as: 'UserProfile' },
+        { model: UserEmail, as: 'UserEmail' },
+        {
+          model: UserRole,
+          as: 'UserRoles',
+          include: [{ model: Role, as: 'Role' }],
+        },
+      ],
+      order: [['CreatedAt', 'DESC']],
+    });
+    return users;
+  } catch (error) {
+    console.error('Error listing all users:', error);
+    throw new Error('Error al listar usuarios');
+  }
+};
+
 export const updateUserPassword = async (userId, hashedPassword) => {
   const transaction = await User.sequelize.transaction();
 
